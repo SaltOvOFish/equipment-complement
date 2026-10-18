@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "caverns_and_chasms:waxed_copper_spear"
+    }
+  ],
+  
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": { "item": "minecraft:stick" },
+    "X": { "item": "minecraft:waxed_copper_block" }
+  },
+  "pattern": [ "  X", " # ", "#  " ],
+  "result": { "id": "caverns_and_chasms:waxed_copper_spear" }
+}

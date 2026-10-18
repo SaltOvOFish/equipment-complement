@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "minecraft:chainmail_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:chainmail_nautilus_armor",
+      "required": false
+    }
+  ]
+}

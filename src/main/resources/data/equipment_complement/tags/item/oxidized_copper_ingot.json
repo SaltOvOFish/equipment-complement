@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:oxidized_copper_ingot",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:oxidized_copper_ingot",
+      "required": false
+    }
+  ]
+}

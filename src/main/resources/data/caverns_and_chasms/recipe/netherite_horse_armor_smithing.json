@@ -1,0 +1,43 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "caverns_and_chasms"
+    },
+    {
+      "type": "equipment_complement:config",
+      "option": "candc_netherite_horse_armor",
+      "expected": true
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "caverns_and_chasms:netherite_horse_armor"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "minecraft:diamond_horse_armor"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "minecraft:netherite_upgrade_smithing_template"
+    },
+    {
+      "type": "neoforge:item_exists",
+      "item": "minecraft:netherite_ingot"
+    }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "minecraft:netherite_upgrade_smithing_template"
+  },
+  "base": {
+    "item": "minecraft:diamond_horse_armor"
+  },
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "count": 1,
+    "id": "caverns_and_chasms:netherite_horse_armor"
+  }
+}

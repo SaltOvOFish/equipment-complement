@@ -1,0 +1,28 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "minecraft:weathered_copper_horse_armor"
+    },
+    {
+      "type": "equipment_complement:config",
+      "option": "mount_armor_crafting"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "X X",
+    "XXX",
+    "X X"
+  ],
+  "key": {
+    "X": {
+      "tag": "equipment_complement:weathered_copper_ingot"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:weathered_copper_horse_armor"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "remove": [
+    "betterend:crystalite_helmet",
+    "betterend:crystalite_chestplate",
+    "betterend:crystalite_leggings",
+    "betterend:crystalite_boots"
+  ],
+  "values": [
+    "betterend:aeternium_boots",
+    "betterend:terminite_boots",
+    "betterend:thallasium_boots",
+    "minecraft:exposed_copper_boots",
+    "minecraft:oxidized_copper_boots",
+    "minecraft:waxed_copper_boots",
+    "minecraft:waxed_exposed_copper_boots",
+    "minecraft:waxed_oxidized_copper_boots",
+    "minecraft:waxed_weathered_copper_boots",
+    "minecraft:weathered_copper_boots"
+  ]
+}

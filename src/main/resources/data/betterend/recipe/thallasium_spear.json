@@ -1,0 +1,11 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:item_exists", "item": "betterend:thallasium_spear" },
+    { "type": "neoforge:item_exists", "item": "betterend:thallasium_spear_head" }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "betterend:handle_attachment_smithing_template" },
+  "base": { "item": "betterend:thallasium_spear_head" },
+  "addition": { "item": "minecraft:stick" },
+  "result": { "id": "betterend:thallasium_spear" }
+}

@@ -1,0 +1,44 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:mod_loaded", "modid": "betterend" },
+    { "type": "neoforge:item_exists", "item": "betterend:terminite_nautilus_armor" },
+    { "type": "neoforge:item_exists", "item": "betterend:crystalite_nautilus_armor" }
+  ],
+  "type": "betterend:infusion",
+  "catalysts": {
+    "west": {
+      "item": {
+        "item": "betterend:amber_gem"
+      }
+    },
+    "north_east": {
+      "item": {
+        "item": "betterend:crystal_shards"
+      }
+    },
+    "north_west": {
+      "item": {
+        "item": "betterend:crystal_shards"
+      }
+    },
+    "south_east": {
+      "item": {
+        "item": "betterend:crystal_shards"
+      }
+    },
+    "south_west": {
+      "item": {
+        "item": "betterend:crystal_shards"
+      }
+    }
+  },
+  "input": {
+    "item": {
+      "item": "betterend:terminite_nautilus_armor"
+    }
+  },
+  "result": {
+    "item": "betterend:crystalite_nautilus_armor"
+  },
+  "time": 300
+}

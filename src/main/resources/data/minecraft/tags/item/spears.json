@@ -1,0 +1,27 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "oreganized:silver_spear", "required": false },
+    { "id": "oreganized:electrum_spear", "required": false },
+    { "id": "betterend:terminite_spear", "required": false },
+    { "id": "betterend:aeternium_spear", "required": false },
+    { "id": "betterend:thallasium_spear", "required": false },
+    { "id": "caverns_and_chasms:silver_spear", "required": false },
+    { "id": "caverns_and_chasms:necromium_spear", "required": false },
+    { "id": "caverns_and_chasms:copper_spear", "required": false },
+    { "id": "caverns_and_chasms:exposed_copper_spear", "required": false },
+    { "id": "caverns_and_chasms:weathered_copper_spear", "required": false },
+    { "id": "caverns_and_chasms:oxidized_copper_spear", "required": false },
+    { "id": "caverns_and_chasms:waxed_copper_spear", "required": false },
+    { "id": "caverns_and_chasms:waxed_exposed_copper_spear", "required": false },
+    { "id": "caverns_and_chasms:waxed_weathered_copper_spear", "required": false },
+    { "id": "caverns_and_chasms:waxed_oxidized_copper_spear", "required": false },
+    { "id": "minecraft:exposed_copper_spear", "required": false },
+    { "id": "minecraft:weathered_copper_spear", "required": false },
+    { "id": "minecraft:oxidized_copper_spear", "required": false },
+    { "id": "minecraft:waxed_copper_spear", "required": false },
+    { "id": "minecraft:waxed_exposed_copper_spear", "required": false },
+    { "id": "minecraft:waxed_weathered_copper_spear", "required": false },
+    { "id": "minecraft:waxed_oxidized_copper_spear", "required": false }
+  ]
+}

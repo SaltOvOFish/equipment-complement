@@ -1,0 +1,28 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "minecraft:iron_nautilus_armor"
+    },
+    {
+      "type": "equipment_complement:config",
+      "option": "mount_armor_crafting"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "XXX",
+    " X ",
+    "XXX"
+  ],
+  "result": {
+    "count": 1,
+    "id": "minecraft:iron_nautilus_armor"
+  }
+}

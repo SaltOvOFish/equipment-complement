@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "equipment_complement:config",
+      "option": "mount_armor_crafting"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "X X",
+    "XXX",
+    "X X"
+  ],
+  "result": {
+    "id": "minecraft:iron_horse_armor",
+    "count": 1
+  }
+}

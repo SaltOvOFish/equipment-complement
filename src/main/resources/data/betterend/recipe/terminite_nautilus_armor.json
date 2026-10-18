@@ -1,0 +1,28 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "betterend:terminite_nautilus_armor"
+    },
+    {
+      "type": "equipment_complement:config",
+      "option": "mount_armor_crafting"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "betterend:terminite_forged_plate"
+    }
+  },
+  "pattern": [
+    "XXX",
+    " X ",
+    "XXX"
+  ],
+  "result": {
+    "id": "betterend:terminite_nautilus_armor",
+    "count": 1
+  }
+}

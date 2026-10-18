@@ -1,0 +1,15 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "betterend:terminite_spear_head"
+    }
+  ],
+  
+  "type": "bclib:smithing",
+  "allowedTools": "betterend:anvil_tool/diamond",
+  "anvilLevel": 3,
+  "damage": 3,
+  "input": { "item": "betterend:terminite_ingot" },
+  "result": { "item": "betterend:terminite_spear_head" }
+}

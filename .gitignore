@@ -1,0 +1,16 @@
+.gradle/
+build/
+run/
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# 前置模组 jar：自行下载，不入库
+libs/*.jar
+libs/obsolete/
+*.log
+
+# 本地测试实例 / 模组目录（如果放在项目内）
+mods/

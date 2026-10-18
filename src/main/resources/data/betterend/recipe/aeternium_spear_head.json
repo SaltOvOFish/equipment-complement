@@ -1,0 +1,15 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "betterend:aeternium_spear_head"
+    }
+  ],
+  
+  "type": "bclib:smithing",
+  "allowedTools": "betterend:anvil_tool/netherite",
+  "anvilLevel": 5,
+  "damage": 6,
+  "input": { "item": "betterend:aeternium_ingot" },
+  "result": { "item": "betterend:aeternium_spear_head" }
+}

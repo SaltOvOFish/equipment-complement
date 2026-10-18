@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "minecraft:weathered_copper_leggings"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "XXX",
+    "X X",
+    "X X"
+  ],
+  "key": {
+    "X": {
+      "tag": "equipment_complement:weathered_copper_ingot"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "minecraft:weathered_copper_leggings"
+  }
+}

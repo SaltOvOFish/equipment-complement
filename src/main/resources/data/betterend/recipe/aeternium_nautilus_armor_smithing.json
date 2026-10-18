@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "betterend:aeternium_nautilus_armor"
+    }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": {
+    "item": "betterend:plate_upgrade_smithing_template"
+  },
+  "base": {
+    "item": "betterend:terminite_nautilus_armor"
+  },
+  "addition": {
+    "item": "betterend:aeternium_forged_plate"
+  },
+  "result": {
+    "id": "betterend:aeternium_nautilus_armor",
+    "count": 1
+  }
+}

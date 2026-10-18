@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "oreganized:silver_spear"
+    }
+  ],
+  
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": { "item": "minecraft:stick" },
+    "X": { "item": "oreganized:silver_ingot" }
+  },
+  "pattern": [ "  X", " # ", "#  " ],
+  "result": { "id": "oreganized:silver_spear" }
+}

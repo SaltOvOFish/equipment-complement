@@ -1,0 +1,14 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "oreganized:electrum_spear"
+    }
+  ],
+  
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "oreganized:electrum_upgrade_smithing_template" },
+  "base": { "item": "minecraft:diamond_spear" },
+  "addition": { "item": "oreganized:electrum_ingot" },
+  "result": { "id": "oreganized:electrum_spear" }
+}

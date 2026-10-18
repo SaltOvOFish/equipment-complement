@@ -1,0 +1,15 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "caverns_and_chasms:silver_spear"
+    }
+  ],
+  
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": { "item": "caverns_and_chasms:silver_spear" },
+  "result": { "id": "caverns_and_chasms:silver_nugget" }
+}

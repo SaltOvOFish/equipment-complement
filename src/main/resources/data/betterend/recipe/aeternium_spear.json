@@ -1,0 +1,11 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:item_exists", "item": "betterend:aeternium_spear" },
+    { "type": "neoforge:item_exists", "item": "betterend:aeternium_spear_head" }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "betterend:leather_handle_attachment_smithing_template" },
+  "base": { "item": "betterend:aeternium_spear_head" },
+  "addition": { "item": "betterend:leather_wrapped_stick" },
+  "result": { "id": "betterend:aeternium_spear" }
+}

@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "caverns_and_chasms:oxidized_copper_spear"
+    }
+  ],
+  
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": { "item": "minecraft:stick" },
+    "X": { "item": "minecraft:oxidized_copper" }
+  },
+  "pattern": [ "  X", " # ", "#  " ],
+  "result": { "id": "caverns_and_chasms:oxidized_copper_spear" }
+}
