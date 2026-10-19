@@ -26,7 +26,7 @@
 
 - 为 Oreganized、Caverns & Chasms、BetterEnd 的多种材质补充长矛。
 - 包含银、琥珀金、死灵合金、塔拉斯金、终末合金、太古合金，以及 BetterEnd 的矛头。
-- 所有长矛统一使用 `bettercombat:spear` 武器属性（双手、长柄姿态）。
+- 所有长矛统一使用 `bettercombat:spear` 武器属性(仅做预备，当前版本VB并不完全兼容BetterCombat)。
 - 铜矛包含氧化 / 涂蜡变体。
 
 ### 马铠
@@ -37,7 +37,6 @@
   - 开启 `candc_netherite_horse_armor` 后改用 C&C 版，并隐藏 / 禁用另一版的获取方式；
   - C&C 版数值会对齐 VanillaBackport 版。
 - 锁链马铠会出现在林地府邸与盔甲匠礼物战利品中。
-- 皮革马铠始终可以合成；皮匠专家级也会以 6 个绿宝石出售随机染色版本。
 
 ### 鹦鹉螺铠
 
