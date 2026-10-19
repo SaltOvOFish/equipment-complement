@@ -14,7 +14,7 @@
 | [BetterEnd](https://modrinth.com/mod/betterend) | paulevsGitch / Raijin | MIT；部分素材为 CC BY-NC-SA 4.0 | 可选兼容，不捆绑 |
 | [Oreganized](https://github.com/TeamGalena/oreganized) | TeamGalena | 代码与素材分别授权；素材为 All Rights Reserved | 可选兼容，不捆绑 |
 | [Caverns & Chasms](https://github.com/team-abnormals/caverns-and-chasms) | Team Abnormals | Abnormals License 1.0；素材 All Rights Reserved | 可选兼容，不捆绑 |
-| [Backported Spears](https://github.com/Unknowneth/Backported-Spears) | Unknowneth | CC0-1.0 | 长矛玩法参考；银矛、死灵合金矛的物品 / 手持贴图来源，不捆绑 |
+| [Backported Spears](https://github.com/Unknowneth/Backported-Spears) | Unknowneth | CC0-1.0 | 银矛、死灵合金矛的物品 / 手持贴图来源，不捆绑 |
 
 ## 素材来源说明
 
