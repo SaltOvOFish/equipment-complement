@@ -26,7 +26,7 @@
 
 - 为 Oreganized、Caverns & Chasms、BetterEnd 的多种材质补充长矛。
 - 包含银、琥珀金、死灵合金、塔拉斯金、终末合金、太古合金，以及 BetterEnd 的矛头。
-- 所有长矛统一使用 `bettercombat:spear` 武器属性(仅做预备，当前版本VBP并不完全兼容BetterCombat)。
+- 所有长矛统一使用 `bettercombat:spear` 武器属性。
 - 铜矛包含氧化 / 涂蜡变体。
 
 ### 马铠
