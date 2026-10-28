@@ -74,14 +74,26 @@ dependencies {
     // 必装前置：VanillaBackport（长矛核心）与其依赖 Platform 库（官方 1.2 / 1.4 版本）。
     // 默认从 libs/ 读取前置 jar；也可以用 -Pdependency_dir=<目录> 指定其它目录。
     def dependencyDir = file(providers.gradleProperty('dependency_dir').orElse('libs').get())
-    def vbpJar = new File(dependencyDir, 'VanillaBackport-neoforge-1.21.1-1.2.jar')
-    def platformJar = new File(dependencyDir, 'Platform-neoforge-1.21.1-1.4.jar')
 
-    if (!vbpJar.exists() || !platformJar.exists()) {
-        throw new GradleException(
-                "缺少前置 jar。请自行下载 VanillaBackport >= 1.2 与 Platform >= 1.4，" +
-                "放到 libs/，或使用 -Pdependency_dir=<目录>。")
+    // 按文件名里的版本号挑出目录中最新的前置 jar，升级前置时无需再改构建脚本。
+    def latestPrefixed = { String prefix, String label ->
+        def candidates = (dependencyDir.listFiles() ?: []).findAll { it.isFile() && it.name.startsWith(prefix) }
+        if (candidates.isEmpty()) {
+            throw new GradleException(
+                    "缺少前置 jar（${label}）。请自行下载 VanillaBackport >= 1.2 与 Platform >= 1.4，" +
+                    "放到 libs/，或使用 -Pdependency_dir=<目录>。")
+        }
+        // VanillaBackport-neoforge-1.21.1-1.2.2.jar -> "1.2.2"，按数字逐段比较
+        def versionKey = { File f ->
+            def matcher = f.name =~ /-1\.21\.1-(\d+(?:\.\d+)*)\.jar$/
+            matcher.find() ? matcher.group(1).tokenize('.').collect { it.padLeft(5, '0') }.join('.') : ''
+        }
+        candidates.sort { a, b -> versionKey(a) <=> versionKey(b) }.last()
     }
+
+    def vbpJar = latestPrefixed('VanillaBackport-neoforge-1.21.1-', 'VanillaBackport')
+    def platformJar = latestPrefixed('Platform-neoforge-1.21.1-', 'Platform')
+    logger.lifecycle("[equipment-complement] dependencies: ${vbpJar.name} / ${platformJar.name}")
 
     compileOnly files(vbpJar, platformJar)
     localRuntime files(vbpJar, platformJar)

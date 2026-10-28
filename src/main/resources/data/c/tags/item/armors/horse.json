@@ -1,0 +1,61 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:chainmail_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:exposed_copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:weathered_copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:oxidized_copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_exposed_copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_weathered_copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_oxidized_copper_horse_armor",
+      "required": false
+    },
+    {
+      "id": "oreganized:silver_horse_armor",
+      "required": false
+    },
+    {
+      "id": "oreganized:electrum_horse_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:thallasium_horse_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:terminite_horse_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:crystalite_horse_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:aeternium_horse_armor",
+      "required": false
+    }
+  ]
+}

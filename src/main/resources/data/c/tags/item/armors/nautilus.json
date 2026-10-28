@@ -1,0 +1,105 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:leather_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:chainmail_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:exposed_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:weathered_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:oxidized_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_exposed_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_weathered_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "minecraft:waxed_oxidized_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "oreganized:silver_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "oreganized:electrum_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:silver_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:exposed_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:weathered_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:oxidized_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:waxed_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:waxed_exposed_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:waxed_weathered_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:waxed_oxidized_copper_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "caverns_and_chasms:necromium_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:thallasium_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:terminite_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:aeternium_nautilus_armor",
+      "required": false
+    },
+    {
+      "id": "betterend:crystalite_nautilus_armor",
+      "required": false
+    }
+  ]
+}

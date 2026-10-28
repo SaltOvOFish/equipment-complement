@@ -12,8 +12,8 @@
 
 | 模组 | 类型 | 最低版本 | 说明 |
 |---|---|---|---|
-| [VanillaBackport](https://github.com/ItsBlackGear/VanillaBackport) | 必装 | **1.2** | 长矛核心、鹦鹉螺铠、铜装备本体 |
-| [Platform](https://github.com/ItsBlackGear/Platform) | 必装 | **1.4** | VanillaBackport 的库依赖 / 物品渲染器 API |
+| [VanillaBackport](https://github.com/ItsBlackGear/VanillaBackport) | 必装 | **1.2**（已在 1.2.2 测试） | 长矛核心、鹦鹉螺铠、铜装备本体 |
+| [Platform](https://github.com/ItsBlackGear/Platform) | 必装 | **1.4**（已在 1.4.2 测试） | VanillaBackport 的库依赖 / 物品渲染器 API |
 | [BetterEnd](https://modrinth.com/mod/betterend) | 可选 | 21.0.x | 塔拉斯金 / 终末合金 / 融晶 / 太古合金材质 |
 | [Oreganized](https://modrinth.com/mod/oreganized) | 可选 | 5.x | 银 / 琥珀金材质 |
 | [Caverns & Chasms](https://modrinth.com/mod/caverns-and-chasms) | 可选 | 3.x | 银 / 铜 / 死灵合金材质；需要 Blueprint |
@@ -26,7 +26,7 @@
 
 - 为 Oreganized、Caverns & Chasms、BetterEnd 的多种材质补充长矛。
 - 包含银、琥珀金、死灵合金、塔拉斯金、终末合金、太古合金，以及 BetterEnd 的矛头。
-- 所有长矛统一使用 `bettercombat:spear` 武器属性(仅做预备，当前版本VB并不完全兼容BetterCombat)。
+- 所有长矛统一使用 `bettercombat:spear` 武器属性(仅做预备，当前版本VBP并不完全兼容BetterCombat)。
 - 铜矛包含氧化 / 涂蜡变体。
 
 ### 马铠
@@ -93,8 +93,10 @@
 
 需要 **JDK 21**。前置模组 jar **不包含在本仓库中**，请自行从官方发布页下载：
 
-- `VanillaBackport-neoforge-1.21.1-1.2.jar`（或更高）
-- `Platform-neoforge-1.21.1-1.4.jar`（或更高）
+- `VanillaBackport-neoforge-1.21.1-1.2.2.jar`（或更高）
+- `Platform-neoforge-1.21.1-1.4.2.jar`（或更高）
+
+构建脚本会自动挑选 `libs/` 中版本号最高的前置 jar，升级前置时不需要改 `build.gradle`。
 
 默认构建会读取 `libs/`；也可以显式指定其它目录：
 
@@ -103,7 +105,7 @@
 .\gradlew.bat build -Pdependency_dir="D:\path\to\dependencies"
 ```
 
-产物位于 `build/libs/equipment_complement-1.0.0.jar`。
+产物位于 `build/libs/equipment_complement-<版本>.jar`。
 
 > 上传仓库时请不要提交 `libs/*.jar`、`libs/obsolete/`、`build/`、`run/` 或 `mods/`。
 
