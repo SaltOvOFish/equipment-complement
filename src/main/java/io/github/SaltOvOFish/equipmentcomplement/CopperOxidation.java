@@ -53,6 +53,9 @@ public final class CopperOxidation {
 
     private static Stage[] byItemId;
 
+    /** 涂蜡物品 → 同阶段未涂蜡物品的反向表（合成去蜡用），与 {@link #byItemId} 同尺寸。 */
+    private static Item[] unwaxedByItemId;
+
     /** 缓存的槽位数组，避免每个实体都做一次枚举克隆。 */
     private static final EquipmentSlot[] SLOTS = EquipmentSlot.values();
 
@@ -107,6 +110,37 @@ public final class CopperOxidation {
     public static Item getWaxed(Item item) {
         Stage stage = enabled(item);
         return stage == null ? null : stage.waxed;
+    }
+
+    /**
+     * 斧子除锈的目标物品：
+     * <ul>
+     *   <li>涂蜡（任意阶段）→ 同阶段的未涂蜡版本（去蜡，不改变阶段）；</li>
+     *   <li>未涂蜡的斑驳 / 锈蚀 → 上一阶段；</li>
+     *   <li>基础「铜」阶段没有上一阶段，最终「氧化」阶段不可除锈，其余情况返回 {@code null}。</li>
+     * </ul>
+     */
+    public static Item getScrapingResult(Item item) {
+        Item unwaxed = unwaxedOf(item);
+        if (unwaxed != null) {
+            Stage base = stageOf(unwaxed);
+            return base != null && base.gate.get() ? unwaxed : null;
+        }
+
+        Stage stage = enabled(item);
+        if (stage == null) return null;
+        // 最终阶段不能继续除锈（避免无限往返），基础阶段也没有上一阶段
+        if (stage.next == null || stage.previous == null) return null;
+        return stage.previous;
+    }
+
+    /**
+     * 水桶氧化的目标物品：未涂蜡铜制品 → 下一氧化阶段。
+     * 涂蜡物品不参与（蜡封防氧化），最终「氧化」阶段没有下一阶段。
+     */
+    public static Item getOxidizingResult(Item item) {
+        Stage stage = enabled(item);
+        return stage == null ? null : stage.next;
     }
 
     /** 是否处于未氧化的「铜」阶段（氧化概率更低，同原版）。 */
@@ -272,6 +306,34 @@ public final class CopperOxidation {
             byItemId = table;
         }
         return byItemId;
+    }
+
+    /** 查反向表：涂蜡物品 → 同阶段未涂蜡物品；不是涂蜡物品返回 null。 */
+    private static Item unwaxedOf(Item item) {
+        if (item == null || item == Items.AIR) return null;
+        Item[] table = unwaxedTable();
+        int id = BuiltInRegistries.ITEM.getId(item);
+        return id >= 0 && id < table.length ? table[id] : null;
+    }
+
+    private static Item[] unwaxedTable() {
+        if (unwaxedByItemId == null) {
+            Item[] table = new Item[BuiltInRegistries.ITEM.size()];
+            for (Chain chain : chains()) {
+                Item[] items = chain.items;
+                if (items[1] == null || items[1] == Items.AIR) continue; // 变体不可用则整条链跳过
+                for (int i = 0; i < STAGES; i++) {
+                    Item waxed = usable(items[i + STAGES]);
+                    Item unwaxed = usable(items[i]);
+                    if (waxed == null || unwaxed == null) continue;
+                    int id = BuiltInRegistries.ITEM.getId(waxed);
+                    if (id < 0 || id >= table.length) continue;
+                    table[id] = unwaxed;
+                }
+            }
+            unwaxedByItemId = table;
+        }
+        return unwaxedByItemId;
     }
 
     private static List<Chain> chains() {

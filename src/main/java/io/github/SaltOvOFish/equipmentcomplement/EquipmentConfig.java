@@ -38,6 +38,10 @@ public class EquipmentConfig {
     public static final ModConfigSpec.BooleanValue VBP_COPPER_OXIDATION;
     /** 是否允许铜制装备放在物品栏任意格中氧化（不必穿戴 / 手持）。 */
     public static final ModConfigSpec.BooleanValue INVENTORY_OXIDATION;
+    /** 是否启用「任意斧子 + 铜制品 → 上一氧化阶段」的除锈合成配方（斧子不消耗）。 */
+    public static final ModConfigSpec.BooleanValue COPPER_SCRAPING_CRAFTING;
+    /** 是否启用「水桶 + 铜制品 → 下一氧化阶段」的氧化合成配方（消耗水，返还空桶）。 */
+    public static final ModConfigSpec.BooleanValue COPPER_OXIDIZING_CRAFTING;
 
     // ==================== 长矛（spears） ====================
     public static final ModConfigSpec.BooleanValue ENABLE_OREGANIZED_SILVER_SPEAR;
@@ -151,6 +155,22 @@ public class EquipmentConfig {
                         "默认：禁用",
                         " Default：false")
                 .define("inventory_oxidation", false);
+        COPPER_SCRAPING_CRAFTING = builder
+                .comment("是否启用「任意斧子 + 铜制品 → 上一氧化阶段」的除锈合成配方",
+                        " Whether to enable the shapeless 'any axe + copper item -> previous oxidation stage' scraping recipe",
+                        "涂蜡的铜制品会合成为同阶段的未涂蜡版本；斧子不会被消耗",
+                        " Waxed copper items are crafted into their unwaxed version of the same stage; the axe is not consumed",
+                        "默认：启用",
+                        " Default：true")
+                .define("copper_scraping_crafting", true);
+        COPPER_OXIDIZING_CRAFTING = builder
+                .comment("是否启用「水桶 + 铜制品 → 下一氧化阶段」的氧化合成配方",
+                        " Whether to enable the shapeless 'water bucket + copper item -> next oxidation stage' recipe",
+                        "合成会消耗水并返还 1 个空铁桶；涂蜡的铜制品不参与",
+                        " The recipe consumes the water and returns one empty bucket; waxed copper items are not affected",
+                        "默认：启用",
+                        " Default：true")
+                .define("copper_oxidizing_crafting", true);
         builder.pop();
 
         // ---------- 模块三：长矛 ----------

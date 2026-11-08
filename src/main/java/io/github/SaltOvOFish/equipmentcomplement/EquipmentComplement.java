@@ -63,6 +63,12 @@ public class EquipmentComplement {
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CopperWaxingRecipe>> COPPER_WAXING_SERIALIZER =
             RECIPE_SERIALIZERS.register("crafting_special_copper_waxing", () -> new SimpleCraftingRecipeSerializer<>(CopperWaxingRecipe::new));
 
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CopperScrapingRecipe>> COPPER_SCRAPING_SERIALIZER =
+            RECIPE_SERIALIZERS.register("crafting_special_copper_scraping", () -> new SimpleCraftingRecipeSerializer<>(CopperScrapingRecipe::new));
+
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CopperOxidizingRecipe>> COPPER_OXIDIZING_SERIALIZER =
+            RECIPE_SERIALIZERS.register("crafting_special_copper_oxidizing", () -> new SimpleCraftingRecipeSerializer<>(CopperOxidizingRecipe::new));
+
     public static DeferredItem<Item> OREGANIZED_SILVER_SPEAR;
     public static DeferredItem<Item> OREGANIZED_ELECTRUM_SPEAR;
     public static DeferredItem<Item> TERMINITE_SPEAR;
