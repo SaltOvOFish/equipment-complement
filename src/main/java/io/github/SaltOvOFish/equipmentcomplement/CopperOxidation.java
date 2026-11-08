@@ -59,6 +59,11 @@ public final class CopperOxidation {
     /** 缓存的槽位数组，避免每个实体都做一次枚举克隆。 */
     private static final EquipmentSlot[] SLOTS = EquipmentSlot.values();
 
+    /** C&amp;C 本体的铜制装备（分阶段物品），只用于工作台除锈 / 氧化配方，不参与随机氧化。 */
+    private static final List<String> CANDC_PIECES = List.of(
+            "sword", "pickaxe", "axe", "shovel", "hoe",
+            "helmet", "chestplate", "leggings", "boots", "horse_armor");
+
     private CopperOxidation() {
     }
 
@@ -72,9 +77,11 @@ public final class CopperOxidation {
         /** 只有该类型的槽位才会推进；{@code null} 表示没有装备槽（仅玩家背包内推进，如铜锭）。 */
         private final EquipmentSlot.Type slotType;
         private final ModConfigSpec.BooleanValue gate;
+        /** 只参与工作台合成（除锈 / 氧化），不参与随机氧化与闪电去氧化（如 C&amp;C 本体的铜制装备）。 */
+        private final boolean craftOnly;
 
         private Stage(Item next, Item previous, Item first, Item waxed, boolean base,
-                      EquipmentSlot.Type slotType, ModConfigSpec.BooleanValue gate) {
+                      EquipmentSlot.Type slotType, ModConfigSpec.BooleanValue gate, boolean craftOnly) {
             this.next = next;
             this.previous = previous;
             this.first = first;
@@ -82,6 +89,7 @@ public final class CopperOxidation {
             this.base = base;
             this.slotType = slotType;
             this.gate = gate;
+            this.craftOnly = craftOnly;
         }
     }
 
@@ -89,11 +97,13 @@ public final class CopperOxidation {
     private static final class Chain {
         private final ModConfigSpec.BooleanValue gate;
         private final EquipmentSlot.Type slotType;
+        private final boolean craftOnly;
         private final Item[] items;
 
-        private Chain(ModConfigSpec.BooleanValue gate, EquipmentSlot.Type slotType, Item[] items) {
+        private Chain(ModConfigSpec.BooleanValue gate, EquipmentSlot.Type slotType, boolean craftOnly, Item[] items) {
             this.gate = gate;
             this.slotType = slotType;
+            this.craftOnly = craftOnly;
             this.items = items;
         }
     }
@@ -109,7 +119,8 @@ public final class CopperOxidation {
     /** 涂蜡版本；不可涂蜡返回 null。 */
     public static Item getWaxed(Item item) {
         Stage stage = enabled(item);
-        return stage == null ? null : stage.waxed;
+        // C&C 本体铜装备的涂蜡由 C&C 自己处理，不接入蜜脾 / 锡板配方
+        return stage == null || stage.craftOnly ? null : stage.waxed;
     }
 
     /**
@@ -217,7 +228,7 @@ public final class CopperOxidation {
     public static void tickContainer(Container container, int slot, Level level) {
         ItemStack stack = container.getItem(slot);
         Stage stage = stageOf(stack.getItem());
-        if (stage == null || stage.slotType != null || !stage.gate.get()) return;
+        if (stage == null || stage.craftOnly || stage.slotType != null || !stage.gate.get()) return;
         ItemStack next = roll(stack, stage, level);
         if (next != null) container.setItem(slot, next);
     }
@@ -234,7 +245,7 @@ public final class CopperOxidation {
         if (!EquipmentConfig.INVENTORY_OXIDATION.get()) return;
         ItemStack stack = container.getItem(slot);
         Stage stage = stageOf(stack.getItem());
-        if (stage == null || stage.slotType == null || !stage.gate.get()) return;
+        if (stage == null || stage.craftOnly || stage.slotType == null || !stage.gate.get()) return;
         ItemStack next = roll(stack, stage, level);
         if (next != null) container.setItem(slot, next);
     }
@@ -258,7 +269,7 @@ public final class CopperOxidation {
     /** 该物品能否在这个槽位上被推进 / 去氧化。 */
     private static Stage usable(Item item, EquipmentSlot slot) {
         Stage stage = stageOf(item);
-        return stage != null && stage.slotType == slot.getType() && stage.gate.get() ? stage : null;
+        return stage != null && !stage.craftOnly && stage.slotType == slot.getType() && stage.gate.get() ? stage : null;
     }
 
     /** 按原版风化概率尝试推进一个阶段；成功返回新物品堆，否则 null。 */
@@ -300,7 +311,7 @@ public final class CopperOxidation {
                     if (id < 0 || id >= table.length) continue;
                     table[id] = new Stage(i < STAGES - 1 ? items[i + 1] : null,
                             i > 0 ? items[i - 1] : null, items[0], usable(items[i + STAGES]),
-                            i == 0, chain.slotType, chain.gate);
+                            i == 0, chain.slotType, chain.gate, chain.craftOnly);
                 }
             }
             byItemId = table;
@@ -380,7 +391,20 @@ public final class CopperOxidation {
                             CopperEquipmentRegistry.VARIANTS.get(i) + "_copper_" + piece));
                 }
             }
-            chains.add(new Chain(EquipmentConfig.VBP_COPPER_OXIDATION, slotTypeFor(piece), items));
+            chains.add(new Chain(EquipmentConfig.VBP_COPPER_OXIDATION, slotTypeFor(piece), false, items));
+        }
+
+        // ===== 族三：C&C 本体的铜制装备（只用于合成，氧化仍由 C&C 自己推进） =====
+        if (CavernsAndChasmsCompat.isLoaded()) {
+            for (String piece : CANDC_PIECES) {
+                Item[] items = new Item[STAGES * 2];
+                items[0] = CavernsAndChasmsCompat.item("copper_" + piece);
+                for (int i = 0; i < CopperEquipmentRegistry.VARIANTS.size(); i++) {
+                    items[i + 1] = CavernsAndChasmsCompat.item(
+                            CopperEquipmentRegistry.VARIANTS.get(i) + "_copper_" + piece);
+                }
+                chains.add(new Chain(EquipmentConfig.CANDC_COPPER_OXIDATION, slotTypeFor(piece), true, items));
+            }
         }
 
         return chains;
@@ -403,7 +427,7 @@ public final class CopperOxidation {
         for (int i = 0; i < items.length && i < holders.length; i++) {
             items[i] = item(holders[i]);
         }
-        return new Chain(gate, slotType, items);
+        return new Chain(gate, slotType, false, items);
     }
 
     private static Item item(DeferredItem<Item> holder) {
