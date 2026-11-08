@@ -59,8 +59,8 @@ public class CopperOxidizingRecipe extends CustomRecipe {
             if (stack.isEmpty() || stack.is(Items.WATER_BUCKET)) continue;
             Item result = CopperOxidation.getOxidizingResult(stack.getItem());
             if (result == null) continue;
-            // 数量与组件（附魔、耐久、自定义名称等）随物品一起转移
-            ItemStack output = new ItemStack(result, stack.getCount());
+            // 每次合成原版只从输入格扣 1 个，产物也只能 1 个，否则会凭空多出物品。
+            ItemStack output = new ItemStack(result);
             output.applyComponents(stack.getComponentsPatch());
             return output;
         }

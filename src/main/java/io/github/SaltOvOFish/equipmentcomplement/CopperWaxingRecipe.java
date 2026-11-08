@@ -79,7 +79,8 @@ public class CopperWaxingRecipe extends CustomRecipe {
             }
         }
         Item waxed = CopperOxidation.getWaxed(spearStack.getItem());
-        ItemStack result = new ItemStack(waxed, spearStack.getCount());
+        // 每次合成原版只从输入格扣 1 个，产物也只能 1 个，否则会凭空多出物品。
+        ItemStack result = new ItemStack(waxed);
         result.applyComponents(spearStack.getComponentsPatch()); // 保留附魔、耐久等
         return result;
     }
