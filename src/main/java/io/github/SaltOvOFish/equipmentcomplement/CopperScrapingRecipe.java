@@ -68,15 +68,34 @@ public class CopperScrapingRecipe extends CustomRecipe {
         return ItemStack.EMPTY;
     }
 
-    /** 斧子不消耗：原样放回合成格。 */
+    /**
+     * 斧子留在合成格里：除锈铜装备时消耗 1 点耐久，除锈铜锭时不掉耐久；
+     * 耐久耗尽的斧子会直接消失（与原版工具一致）。
+     */
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
         NonNullList<ItemStack> remaining = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+
+        Item copper = null;
         for (int i = 0; i < input.size(); i++) {
             ItemStack stack = input.getItem(i);
-            if (!stack.isEmpty() && stack.is(ItemTags.AXES)) {
-                remaining.set(i, stack.copy());
+            if (!stack.isEmpty() && !stack.is(ItemTags.AXES)) {
+                copper = stack.getItem();
+                break;
             }
+        }
+        boolean ingot = copper != null && CopperOxidation.isIngot(copper);
+
+        for (int i = 0; i < input.size(); i++) {
+            ItemStack stack = input.getItem(i);
+            if (stack.isEmpty() || !stack.is(ItemTags.AXES)) continue;
+            ItemStack axe = stack.copy();
+            if (!ingot && axe.isDamageableItem()) {
+                int damage = axe.getDamageValue() + 1;
+                if (damage >= axe.getMaxDamage()) continue; // 耐久耗尽，斧子损坏
+                axe.setDamageValue(damage);
+            }
+            remaining.set(i, axe);
         }
         return remaining;
     }

@@ -67,14 +67,28 @@ public class CopperOxidizingRecipe extends CustomRecipe {
         return ItemStack.EMPTY;
     }
 
-    /** 消耗水，返还空铁桶。 */
+    /**
+     * 水桶返还：氧化铜装备时消耗水，返还空铁桶；
+     * 氧化铜锭时不消耗水，原样返还水桶。
+     */
     @Override
     public NonNullList<ItemStack> getRemainingItems(CraftingInput input) {
         NonNullList<ItemStack> remaining = NonNullList.withSize(input.size(), ItemStack.EMPTY);
+
+        Item copper = null;
         for (int i = 0; i < input.size(); i++) {
-            if (input.getItem(i).is(Items.WATER_BUCKET)) {
-                remaining.set(i, new ItemStack(Items.BUCKET));
+            ItemStack stack = input.getItem(i);
+            if (!stack.isEmpty() && !stack.is(Items.WATER_BUCKET)) {
+                copper = stack.getItem();
+                break;
             }
+        }
+        boolean ingot = copper != null && CopperOxidation.isIngot(copper);
+
+        for (int i = 0; i < input.size(); i++) {
+            ItemStack stack = input.getItem(i);
+            if (!stack.is(Items.WATER_BUCKET)) continue;
+            remaining.set(i, ingot ? stack.copy() : new ItemStack(Items.BUCKET));
         }
         return remaining;
     }

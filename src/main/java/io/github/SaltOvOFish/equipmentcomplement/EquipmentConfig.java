@@ -158,8 +158,10 @@ public class EquipmentConfig {
         COPPER_SCRAPING_CRAFTING = builder
                 .comment("是否启用「任意斧子 + 铜制品 → 上一氧化阶段」的除锈合成配方",
                         " Whether to enable the shapeless 'any axe + copper item -> previous oxidation stage' scraping recipe",
-                        "涂蜡的铜制品会合成为同阶段的未涂蜡版本；斧子不会被消耗",
-                        " Waxed copper items are crafted into their unwaxed version of the same stage; the axe is not consumed",
+                        "涂蜡的铜制品会合成为同阶段的未涂蜡版本；斧子留在合成格中",
+                        " Waxed copper items are crafted into their unwaxed version of the same stage; the axe stays in the crafting grid",
+                        "除锈铜装备时斧子消耗 1 点耐久，除锈铜锭时不掉耐久",
+                        " Scraping copper equipment costs 1 durability on the axe; scraping copper ingots costs none",
                         "默认：启用",
                         " Default：true")
                 .define("copper_scraping_crafting", true);
@@ -168,6 +170,8 @@ public class EquipmentConfig {
                         " Whether to enable the shapeless 'water bucket + copper item -> next oxidation stage' recipe",
                         "合成会消耗水并返还 1 个空铁桶；涂蜡的铜制品不参与",
                         " The recipe consumes the water and returns one empty bucket; waxed copper items are not affected",
+                        "氧化铜装备时消耗水，氧化铜锭时不消耗水、原样返还水桶",
+                        " Oxidizing copper equipment consumes the water; oxidizing copper ingots consumes none and returns the water bucket",
                         "默认：启用",
                         " Default：true")
                 .define("copper_oxidizing_crafting", true);

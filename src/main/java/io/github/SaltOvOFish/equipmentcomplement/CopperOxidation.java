@@ -79,9 +79,11 @@ public final class CopperOxidation {
         private final ModConfigSpec.BooleanValue gate;
         /** 只参与工作台合成（除锈 / 氧化），不参与随机氧化与闪电去氧化（如 C&amp;C 本体的铜制装备）。 */
         private final boolean craftOnly;
+        /** 是否是铜锭（合成时斧子不掉耐久、水桶不消耗水）。 */
+        private final boolean ingot;
 
         private Stage(Item next, Item previous, Item first, Item waxed, boolean base,
-                      EquipmentSlot.Type slotType, ModConfigSpec.BooleanValue gate, boolean craftOnly) {
+                      EquipmentSlot.Type slotType, ModConfigSpec.BooleanValue gate, boolean craftOnly, boolean ingot) {
             this.next = next;
             this.previous = previous;
             this.first = first;
@@ -90,6 +92,7 @@ public final class CopperOxidation {
             this.slotType = slotType;
             this.gate = gate;
             this.craftOnly = craftOnly;
+            this.ingot = ingot;
         }
     }
 
@@ -98,12 +101,15 @@ public final class CopperOxidation {
         private final ModConfigSpec.BooleanValue gate;
         private final EquipmentSlot.Type slotType;
         private final boolean craftOnly;
+        private final boolean ingot;
         private final Item[] items;
 
-        private Chain(ModConfigSpec.BooleanValue gate, EquipmentSlot.Type slotType, boolean craftOnly, Item[] items) {
+        private Chain(ModConfigSpec.BooleanValue gate, EquipmentSlot.Type slotType, boolean craftOnly,
+                      boolean ingot, Item[] items) {
             this.gate = gate;
             this.slotType = slotType;
             this.craftOnly = craftOnly;
+            this.ingot = ingot;
             this.items = items;
         }
     }
@@ -157,6 +163,19 @@ public final class CopperOxidation {
     public static boolean isBaseStage(Item item) {
         Stage stage = stageOf(item);
         return stage != null && stage.base;
+    }
+
+    /**
+     * 该物品是不是铜锭（含涂蜡版本）。
+     * 铜锭合成时斧子不掉耐久、水桶不消耗水；装备则反之。
+     */
+    public static boolean isIngot(Item item) {
+        Stage stage = stageOf(item);
+        if (stage != null) return stage.ingot;
+        Item unwaxed = unwaxedOf(item);
+        if (unwaxed == null) return false;
+        Stage base = stageOf(unwaxed);
+        return base != null && base.ingot;
     }
 
     /** 是否有任一族的氧化机制处于开启状态。 */
@@ -310,7 +329,7 @@ public final class CopperOxidation {
                     if (id < 0 || id >= table.length) continue;
                     table[id] = new Stage(i < STAGES - 1 ? items[i + 1] : null,
                             i > 0 ? items[i - 1] : null, items[0], usable(items[i + STAGES]),
-                            i == 0, chain.slotType, chain.gate, chain.craftOnly);
+                            i == 0, chain.slotType, chain.gate, chain.craftOnly, chain.ingot);
                 }
             }
             byItemId = table;
@@ -390,7 +409,7 @@ public final class CopperOxidation {
                             CopperEquipmentRegistry.VARIANTS.get(i) + "_copper_" + piece));
                 }
             }
-            chains.add(new Chain(EquipmentConfig.VBP_COPPER_OXIDATION, slotTypeFor(piece), false, items));
+            chains.add(new Chain(EquipmentConfig.VBP_COPPER_OXIDATION, slotTypeFor(piece), false, piece.equals("ingot"), items));
         }
 
         // ===== 族三：C&C 本体的铜制装备（只用于合成，氧化仍由 C&C 自己推进） =====
@@ -402,7 +421,7 @@ public final class CopperOxidation {
                     items[i + 1] = CavernsAndChasmsCompat.item(
                             CopperEquipmentRegistry.VARIANTS.get(i) + "_copper_" + piece);
                 }
-                chains.add(new Chain(EquipmentConfig.CANDC_COPPER_OXIDATION, slotTypeFor(piece), true, items));
+                chains.add(new Chain(EquipmentConfig.CANDC_COPPER_OXIDATION, slotTypeFor(piece), true, false, items));
             }
         }
 
@@ -426,7 +445,7 @@ public final class CopperOxidation {
         for (int i = 0; i < items.length && i < holders.length; i++) {
             items[i] = item(holders[i]);
         }
-        return new Chain(gate, slotType, false, items);
+        return new Chain(gate, slotType, false, false, items);
     }
 
     private static Item item(DeferredItem<Item> holder) {
