@@ -127,8 +127,8 @@ public final class CopperOxidation {
      * 斧子除锈的目标物品：
      * <ul>
      *   <li>涂蜡（任意阶段）→ 同阶段的未涂蜡版本（去蜡，不改变阶段）；</li>
-     *   <li>未涂蜡的斑驳 / 锈蚀 → 上一阶段；</li>
-     *   <li>基础「铜」阶段没有上一阶段，最终「氧化」阶段不可除锈，其余情况返回 {@code null}。</li>
+     *   <li>未涂蜡的斑驳 / 锈蚀 / 氧化 → 上一阶段；</li>
+     *   <li>基础「铜」阶段没有上一阶段，其余情况返回 {@code null}。</li>
      * </ul>
      */
     public static Item getScrapingResult(Item item) {
@@ -140,8 +140,7 @@ public final class CopperOxidation {
 
         Stage stage = enabled(item);
         if (stage == null) return null;
-        // 最终阶段不能继续除锈（避免无限往返），基础阶段也没有上一阶段
-        if (stage.next == null || stage.previous == null) return null;
+        // 任意非基础阶段都可以退回上一阶段（含最终「氧化」阶段）
         return stage.previous;
     }
 
