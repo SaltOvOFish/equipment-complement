@@ -10,12 +10,12 @@
     "betterend:aeternium_chestplate",
     "betterend:terminite_chestplate",
     "betterend:thallasium_chestplate",
-    "minecraft:exposed_copper_chestplate",
-    "minecraft:oxidized_copper_chestplate",
-    "minecraft:waxed_copper_chestplate",
-    "minecraft:waxed_exposed_copper_chestplate",
-    "minecraft:waxed_oxidized_copper_chestplate",
-    "minecraft:waxed_weathered_copper_chestplate",
-    "minecraft:weathered_copper_chestplate"
+    { "id": "minecraft:exposed_copper_chestplate", "required": false },
+    { "id": "minecraft:oxidized_copper_chestplate", "required": false },
+    { "id": "minecraft:waxed_copper_chestplate", "required": false },
+    { "id": "minecraft:waxed_exposed_copper_chestplate", "required": false },
+    { "id": "minecraft:waxed_oxidized_copper_chestplate", "required": false },
+    { "id": "minecraft:waxed_weathered_copper_chestplate", "required": false },
+    { "id": "minecraft:weathered_copper_chestplate", "required": false }
   ]
 }

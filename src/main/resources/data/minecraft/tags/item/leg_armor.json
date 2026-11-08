@@ -10,12 +10,12 @@
     "betterend:aeternium_leggings",
     "betterend:terminite_leggings",
     "betterend:thallasium_leggings",
-    "minecraft:exposed_copper_leggings",
-    "minecraft:oxidized_copper_leggings",
-    "minecraft:waxed_copper_leggings",
-    "minecraft:waxed_exposed_copper_leggings",
-    "minecraft:waxed_oxidized_copper_leggings",
-    "minecraft:waxed_weathered_copper_leggings",
-    "minecraft:weathered_copper_leggings"
+    { "id": "minecraft:exposed_copper_leggings", "required": false },
+    { "id": "minecraft:oxidized_copper_leggings", "required": false },
+    { "id": "minecraft:waxed_copper_leggings", "required": false },
+    { "id": "minecraft:waxed_exposed_copper_leggings", "required": false },
+    { "id": "minecraft:waxed_oxidized_copper_leggings", "required": false },
+    { "id": "minecraft:waxed_weathered_copper_leggings", "required": false },
+    { "id": "minecraft:weathered_copper_leggings", "required": false }
   ]
 }

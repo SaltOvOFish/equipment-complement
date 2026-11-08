@@ -10,12 +10,12 @@
     "betterend:aeternium_helmet",
     "betterend:terminite_helmet",
     "betterend:thallasium_helmet",
-    "minecraft:exposed_copper_helmet",
-    "minecraft:oxidized_copper_helmet",
-    "minecraft:waxed_copper_helmet",
-    "minecraft:waxed_exposed_copper_helmet",
-    "minecraft:waxed_oxidized_copper_helmet",
-    "minecraft:waxed_weathered_copper_helmet",
-    "minecraft:weathered_copper_helmet"
+    { "id": "minecraft:exposed_copper_helmet", "required": false },
+    { "id": "minecraft:oxidized_copper_helmet", "required": false },
+    { "id": "minecraft:waxed_copper_helmet", "required": false },
+    { "id": "minecraft:waxed_exposed_copper_helmet", "required": false },
+    { "id": "minecraft:waxed_oxidized_copper_helmet", "required": false },
+    { "id": "minecraft:waxed_weathered_copper_helmet", "required": false },
+    { "id": "minecraft:weathered_copper_helmet", "required": false }
   ]
 }
