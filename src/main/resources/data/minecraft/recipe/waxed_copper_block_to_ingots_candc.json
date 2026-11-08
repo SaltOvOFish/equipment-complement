@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "caverns_and_chasms:waxed_copper_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:waxed_copper_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "caverns_and_chasms:waxed_copper_ingot"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "minecraft:waxed_exposed_copper_ingot", "required": false },
+    { "id": "caverns_and_chasms:waxed_exposed_copper_ingot", "required": false }
+  ]
+}

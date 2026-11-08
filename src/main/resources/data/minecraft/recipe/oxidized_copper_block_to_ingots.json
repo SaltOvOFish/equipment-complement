@@ -1,0 +1,19 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:item_exists",
+      "item": "minecraft:oxidized_copper_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:oxidized_copper"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "id": "minecraft:oxidized_copper_ingot"
+  }
+}
