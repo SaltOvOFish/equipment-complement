@@ -6,6 +6,7 @@
 
 - 适用版本：Minecraft **1.21.1** + NeoForge **21.1.209**
 - Mod ID：`equipment_complement`
+- 当前版本：**1.2.0**
 - 许可证：**MIT License**
 
 ## 前置
@@ -18,18 +19,17 @@
 | [Oreganized](https://modrinth.com/mod/oreganized) | 可选 | 5.x | 银 / 琥珀金材质 |
 | [Caverns & Chasms](https://modrinth.com/mod/caverns-and-chasms) | 可选 | 3.x | 银 / 铜 / 死灵合金 / 血裔材质；需要 Blueprint |
 | [Curiosities](https://modrinth.com/mod/curiosities) | 可选 | 0.2.x | 铝（旅行者） / 殷钢材质；需要 Blueprint |
-| [Legendary Monsters](https://modrinth.com/mod/legendary-monsters) | 可选 | 2.2.x | 终末金属长矛 |
+| [Legendary Monsters](https://modrinth.com/mod/legendary-monsters) | 可选 | 2.2.x | 终末金属材质 |
 
-未安装可选模组时，对应物品、配方与配置项不会注册，不影响其余内容。
+未安装可选模组时，对应物品与配方不会注册，不影响其余内容；相关配置项仍会出现在配置文件中，但不会产生实际效果。安装方式为把本模组 jar 放入 `mods/`。
 
 ## 内容概览
 
 ### 长矛
 
-- 为 Oreganized、Caverns & Chasms、BetterEnd、Curiosities、Legendary Monsters 补充多种材质长矛。
-- 包含银、琥珀金、死灵合金、塔拉斯金、终末合金、太古合金、铝、殷钢、终末金属，以及 BetterEnd 的矛头。
+- 补充银、琥珀金、死灵合金、塔拉斯金、终末合金、太古合金、铝、殷钢、终末金属长矛，以及塔拉斯金 / 终末合金 / 太古合金三种矛头。
 - 铝矛附带 +2 实体交互距离与 +2 攻击触及；殷钢矛附带 +15% 护甲穿透。
-- 所有长矛统一使用 `bettercombat:spear` 武器属性。
+- 所有长矛显式使用 `bettercombat:spear` 武器属性。
 - 铜矛包含氧化 / 涂蜡变体。
 
 ### 马铠
@@ -46,11 +46,9 @@
 
 - 补充皮革、锁链、银（Oreganized / C&C）、铜（C&C）、死灵合金、血裔、旅行者（铝）、殷钢、塔拉斯金、终末合金、融晶、太古合金鹦鹉螺铠。
 - 旅行者鹦鹉螺铠提供 +15% 移速与 +15% 跳跃力度（提高骑乘蓄力冲刺距离 / 跃出高度）；殷钢鹦鹉螺铠提供 0.25 伤害减免；血裔与融晶鹦鹉螺铠提供生命恢复 I。
-- 皮革鹦鹉螺铠可像皮革盔甲一样用染料染色，支持混色。
+- 皮革鹦鹉螺铠可像皮革盔甲一样用染料染色，支持混色，并且始终可以合成，不依赖战利品。
 - C&C 铜鹦鹉螺铠包含氧化 / 涂蜡变体，并带有与 C&C 铜马铠一致的移动速度惩罚。
 - 锁链鹦鹉螺铠会出现在林地府邸与盔甲匠礼物战利品中。
-- 皮革鹦鹉螺铠始终可以合成，不依赖战利品。
-- 皮匠专家级也会以 6 个绿宝石出售随机染色的皮革鹦鹉螺铠（与皮革马铠一致）。
 
 ### 铜装备氧化与涂蜡
 
@@ -64,25 +62,28 @@
 
 ### 创造模式标签页与资源包
 
-- 「装备增补」标签页收录本模组新增物品；是否显示铜变体由 `copper_variants_in_tab` 控制。
+- 「装备增补」标签页收录本模组新增物品。该标签页**默认关闭**，需将 `equipment_tab` 置为 true；是否在其中显示铜变体由 `copper_variants_in_tab` 控制（默认关闭）。
 - 内置「重铜命名」资源包，把 C&C 本体的铜装备显示为「重铜XX」；仅在安装 C&C 时挂载。
 
-## 获取与配方（概况）
+## 获取与配方
 
-- 马铠工作台形状：`X·X / XXX / X·X`
-- 鹦鹉螺铠工作台形状：`XXX / ·X· / XXX`
-- 皮革马铠与皮革鹦鹉螺铠**始终可以合成**，并可在皮匠专家级交易中以 6 个绿宝石购买随机染色版本。
-- 其余新增的工作台坐骑铠配方受 `mount_armor_crafting` 控制；关闭后这些配方会从工作台 / JEI 中消失。
-- 锻造台配方（下界合金、终末合金、琥珀金、死灵合金、铝 / 旅行者、殷钢、终末金属）与融晶灌注配方**不受** `mount_armor_crafting` 影响。
+- 新增马铠的工作台形状为 `X·X / XXX / X·X`（7 份材料）。
+- 新增鹦鹉螺铠的工作台形状为 `XXX / ·X· / XXX`（7 份材料）。
+- 皮革鹦鹉螺铠始终可以合成；皮匠专家级会以 6 个绿宝石出售随机染色的皮革鹦鹉螺铠（与原版皮革马铠一致）。
+- 其余工作台坐骑铠配方受 `mount_armor_crafting` 控制；关闭后这些配方会从工作台 / JEI 中消失。
+- 以下配方**不受** `mount_armor_crafting` 影响：
+  - 锻造台：下界合金、太古合金（由终末合金升级）、琥珀金、死灵合金、旅行者（铝）、殷钢、终末金属；
+  - 锻造台：长矛（矛头 + 木棍）；
+  - BetterEnd 融晶灌注（由终末合金灌注）。
 - 完整的配方与数值请以游戏内 JEI 和物品 tooltip 为准。
 
 ## 配置
 
-首次启动生成 `config/equipment_complement-startup.toml`，按用途分为五组：
+首次启动生成 `config/equipment_complement-startup.toml`，按用途分为五组共 **48 项**：
 
 | 分组 | 内容 |
 |---|---|
-| `[general]` | 装备增补标签页、C&C 下界合金马铠替换、铜变体显示、重铜命名、工作台坐骑铠配方总开关 |
+| `[general]` | 装备增补标签页（默认关闭）、C&C 下界合金马铠替换、铜变体显示、重铜命名、工作台坐骑铠配方总开关 |
 | `[oxidation]` | C&C / VanillaBackport 铜装备氧化、物品栏氧化、斧子除锈与浇水氧化配方 |
 | `[spears]` | 各材质长矛与矛头注册开关 |
 | `[armor.horse_armor]` | 各材质马铠注册开关 |
@@ -90,23 +91,11 @@
 
 所有配置均为 **STARTUP** 类型，修改后需要重启游戏。
 
-## 安装
-
-1. 安装 Minecraft 1.21.1 + NeoForge。
-2. 安装必装前置 VanillaBackport ≥ 1.2 与 Platform ≥ 1.4。
-3. 按需安装 BetterEnd / Oreganized / Caverns & Chasms / Curiosities / Legendary Monsters。
-4. 将本模组 jar 放入 `mods/`。
-
 ## 构建
 
-需要 **JDK 21**。前置模组 jar **不包含在本仓库中**，请自行从官方发布页下载：
+需要 **JDK 21**。前置模组 jar **不包含在本仓库中**，请自行从官方发布页下载 `VanillaBackport-neoforge-1.21.1-1.2.2.jar`（或更高）与 `Platform-neoforge-1.21.1-1.4.2.jar`（或更高）放入 `libs/`。
 
-- `VanillaBackport-neoforge-1.21.1-1.2.2.jar`（或更高）
-- `Platform-neoforge-1.21.1-1.4.2.jar`（或更高）
-
-构建脚本会自动挑选 `libs/` 中版本号最高的前置 jar，升级前置时不需要改 `build.gradle`。
-
-默认构建会读取 `libs/`；也可以显式指定其它目录：
+构建脚本会自动挑选 `libs/` 中版本号最高的前置 jar，升级前置时不需要改 `build.gradle`；也可以显式指定其它目录：
 
 ```powershell
 .\gradlew.bat build
@@ -120,10 +109,10 @@
 ## 兼容性说明
 
 - **Better Combat**：所有长矛显式使用 `bettercombat:spear`，不依赖回退正则。
+- **数据包标签**：本模组写入的标签条目全部标记为非必需，缺失可选模组时不会导致整条原版标签加载失败。
 - **Caverns & Chasms 下界合金马铠**：两个版本同时只保留一个可正常获取；被隐藏的版本仍注册，可用 `/give` 取得。
 - **坐骑铠耐久**：与原版马铠一致，不设耐久。
-- **配置文件**：STARTUP 类型，改动后需重启。
-- **Mixin**：对 `CraftingMenu` / `ResultSlot` 注入了取料期间暂缓中间状态重算的 Mixin，并对 `AbstractNautilus` 注入了让骑乘蓄力冲刺额外读取 `jump_strength` 倍率的 Mixin。
+- **Mixin**：对 `CraftingMenu` / `ResultSlot` 注入取料期间暂缓中间状态重算的逻辑，并对 `AbstractNautilus` 注入让骑乘蓄力冲刺额外读取 `jump_strength` 倍率的逻辑。
 
 ## 许可证与致谢
 
