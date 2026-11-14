@@ -30,7 +30,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  * {@link CopperOxidation} / {@link CopperWaxingRecipe}。</p>
  *
  * <p>融晶（crystalite）鹦鹉螺铠护甲为小数 9.4，材质防御全为 0，
- * 实际数值由 {@link ArmorAttributeEvents} 写入。</p>
+ * 实际数值由 {@link ItemAttributeEvents} 写入。</p>
  */
 public final class NautilusArmorRegistry {
 
@@ -42,11 +42,8 @@ public final class NautilusArmorRegistry {
             DeferredRegister.create(Registries.ARMOR_MATERIAL, "caverns_and_chasms");
     private static final DeferredRegister<ArmorMaterial> BETTEREND_MATERIALS =
             DeferredRegister.create(Registries.ARMOR_MATERIAL, "betterend");
-
-    private static final DeferredRegister.Items MINECRAFT_ITEMS = DeferredRegister.createItems("minecraft");
-    private static final DeferredRegister.Items OREGANIZED_ITEMS = DeferredRegister.createItems("oreganized");
-    private static final DeferredRegister.Items CAVERNS_ITEMS = DeferredRegister.createItems("caverns_and_chasms");
-    private static final DeferredRegister.Items BETTEREND_ITEMS = DeferredRegister.createItems("betterend");
+    private static final DeferredRegister<ArmorMaterial> CURIOSITIES_MATERIALS =
+            DeferredRegister.create(Registries.ARMOR_MATERIAL, "curiosities");
 
     // ===== Minecraft =====
     public static DeferredItem<Item> LEATHER_NAUTILUS_ARMOR;
@@ -87,6 +84,16 @@ public final class NautilusArmorRegistry {
     public static DeferredItem<Item> AETERNIUM_NAUTILUS_ARMOR;
     public static DeferredItem<Item> CRYSTALITE_NAUTILUS_ARMOR;
 
+    // ===== Curiosities =====
+    public static DeferredHolder<ArmorMaterial, ArmorMaterial> ALUMINUM_MATERIAL;
+    public static DeferredHolder<ArmorMaterial, ArmorMaterial> INVAR_MATERIAL;
+    public static DeferredItem<Item> ALUMINUM_NAUTILUS_ARMOR;
+    public static DeferredItem<Item> INVAR_NAUTILUS_ARMOR;
+
+    // ===== Caverns & Chasms：血裔 =====
+    public static DeferredHolder<ArmorMaterial, ArmorMaterial> SANGUINE_MATERIAL;
+    public static DeferredItem<Item> SANGUINE_NAUTILUS_ARMOR;
+
     private NautilusArmorRegistry() {
     }
 
@@ -95,13 +102,13 @@ public final class NautilusArmorRegistry {
             // 直接复用原版皮革护甲材质：BODY 防御正好是 3，附魔值 15、皮革修复、皮革穿戴音效也都与皮革盔甲一致；
             // 并且材质注册名是 minecraft:leather，纹理路径自然落在
             // minecraft:textures/entity/nautilus/armor/leather.png，与已提供的贴图一致。
-            LEATHER_NAUTILUS_ARMOR = nautilusArmor(MINECRAFT_ITEMS, "leather_nautilus_armor",
+            LEATHER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.MINECRAFT, "leather_nautilus_armor",
                     net.minecraft.world.item.ArmorMaterials.LEATHER, false);
         }
         if (EquipmentConfig.ENABLE_CHAINMAIL_NAUTILUS_ARMOR.get()) {
             CHAINMAIL_MATERIAL = ArmorMaterials.register(MINECRAFT_MATERIALS, "chainmail_nautilus_armor",
                     5, 12, SoundEvents.ARMOR_EQUIP_CHAIN, "minecraft", "iron_ingot", 0.0F, 0.0F);
-            CHAINMAIL_NAUTILUS_ARMOR = nautilusArmor(MINECRAFT_ITEMS, "chainmail_nautilus_armor",
+            CHAINMAIL_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.MINECRAFT, "chainmail_nautilus_armor",
                     CHAINMAIL_MATERIAL, false);
         }
 
@@ -109,13 +116,13 @@ public final class NautilusArmorRegistry {
             if (EquipmentConfig.ENABLE_OREGANIZED_SILVER_NAUTILUS_ARMOR.get()) {
                 OREGANIZED_SILVER_MATERIAL = ArmorMaterials.register(OREGANIZED_MATERIALS, "silver_nautilus_armor",
                         6, 25, SoundEvents.ARMOR_EQUIP_GOLD, "oreganized", "silver_ingot", 0.0F, 0.0F);
-                OREGANIZED_SILVER_NAUTILUS_ARMOR = nautilusArmor(OREGANIZED_ITEMS, "silver_nautilus_armor",
+                OREGANIZED_SILVER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.OREGANIZED, "silver_nautilus_armor",
                         OREGANIZED_SILVER_MATERIAL, false);
             }
             if (EquipmentConfig.ENABLE_OREGANIZED_ELECTRUM_NAUTILUS_ARMOR.get()) {
                 OREGANIZED_ELECTRUM_MATERIAL = ArmorMaterials.register(OREGANIZED_MATERIALS, "electrum_nautilus_armor",
                         19, 22, SoundEvents.ARMOR_EQUIP_GOLD, "oreganized", "electrum_ingot", 2.0F, 0.0F);
-                OREGANIZED_ELECTRUM_NAUTILUS_ARMOR = nautilusArmor(OREGANIZED_ITEMS, "electrum_nautilus_armor",
+                OREGANIZED_ELECTRUM_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.OREGANIZED, "electrum_nautilus_armor",
                         OREGANIZED_ELECTRUM_MATERIAL, false);
             }
         }
@@ -124,39 +131,45 @@ public final class NautilusArmorRegistry {
             if (EquipmentConfig.ENABLE_CANDC_SILVER_NAUTILUS_ARMOR.get()) {
                 CANDC_SILVER_MATERIAL = ArmorMaterials.register(CAVERNS_MATERIALS, "silver_nautilus_armor",
                         6, 25, SoundEvents.ARMOR_EQUIP_GOLD, "caverns_and_chasms", "silver_ingot", 0.0F, 0.0F);
-                CANDC_SILVER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "silver_nautilus_armor",
+                CANDC_SILVER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "silver_nautilus_armor",
                         CANDC_SILVER_MATERIAL, false);
             }
             if (EquipmentConfig.ENABLE_CANDC_COPPER_NAUTILUS_ARMOR.get()) {
                 CANDC_COPPER_MATERIAL = copperMaterial("copper_nautilus_armor");
-                CANDC_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "copper_nautilus_armor",
+                CANDC_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "copper_nautilus_armor",
                         CANDC_COPPER_MATERIAL, false);
                 if (EquipmentConfig.CANDC_COPPER_OXIDATION.get()) {
                     CANDC_EXPOSED_COPPER_MATERIAL = copperMaterial("exposed_copper_nautilus_armor");
-                    CANDC_EXPOSED_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "exposed_copper_nautilus_armor",
+                    CANDC_EXPOSED_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "exposed_copper_nautilus_armor",
                             CANDC_EXPOSED_COPPER_MATERIAL, false);
                     CANDC_WEATHERED_COPPER_MATERIAL = copperMaterial("weathered_copper_nautilus_armor");
-                    CANDC_WEATHERED_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "weathered_copper_nautilus_armor",
+                    CANDC_WEATHERED_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "weathered_copper_nautilus_armor",
                             CANDC_WEATHERED_COPPER_MATERIAL, false);
                     CANDC_OXIDIZED_COPPER_MATERIAL = copperMaterial("oxidized_copper_nautilus_armor");
-                    CANDC_OXIDIZED_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "oxidized_copper_nautilus_armor",
+                    CANDC_OXIDIZED_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "oxidized_copper_nautilus_armor",
                             CANDC_OXIDIZED_COPPER_MATERIAL, false);
                     // 涂蜡系列共用未涂蜡材质（贴图与属性都一致）
-                    CANDC_WAXED_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "waxed_copper_nautilus_armor",
+                    CANDC_WAXED_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "waxed_copper_nautilus_armor",
                             CANDC_COPPER_MATERIAL, false);
-                    CANDC_WAXED_EXPOSED_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "waxed_exposed_copper_nautilus_armor",
+                    CANDC_WAXED_EXPOSED_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "waxed_exposed_copper_nautilus_armor",
                             CANDC_EXPOSED_COPPER_MATERIAL, false);
-                    CANDC_WAXED_WEATHERED_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "waxed_weathered_copper_nautilus_armor",
+                    CANDC_WAXED_WEATHERED_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "waxed_weathered_copper_nautilus_armor",
                             CANDC_WEATHERED_COPPER_MATERIAL, false);
-                    CANDC_WAXED_OXIDIZED_COPPER_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "waxed_oxidized_copper_nautilus_armor",
+                    CANDC_WAXED_OXIDIZED_COPPER_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "waxed_oxidized_copper_nautilus_armor",
                             CANDC_OXIDIZED_COPPER_MATERIAL, false);
                 }
             }
             if (EquipmentConfig.ENABLE_CANDC_NECROMIUM_NAUTILUS_ARMOR.get()) {
                 CANDC_NECROMIUM_MATERIAL = ArmorMaterials.register(CAVERNS_MATERIALS, "necromium_nautilus_armor",
                         19, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, "caverns_and_chasms", "necromium_ingot", 2.0F, 0.0F);
-                CANDC_NECROMIUM_NAUTILUS_ARMOR = nautilusArmor(CAVERNS_ITEMS, "necromium_nautilus_armor",
+                CANDC_NECROMIUM_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "necromium_nautilus_armor",
                         CANDC_NECROMIUM_MATERIAL, false);
+            }
+            if (EquipmentConfig.ENABLE_CANDC_SANGUINE_NAUTILUS_ARMOR.get()) {
+                SANGUINE_MATERIAL = ArmorMaterials.register(CAVERNS_MATERIALS, "sanguine_nautilus_armor",
+                        10, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, "caverns_and_chasms", "living_flesh", 1.0F, 0.0F);
+                SANGUINE_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CAVERNS_AND_CHASMS, "sanguine_nautilus_armor",
+                        SANGUINE_MATERIAL, false);
             }
         }
 
@@ -164,26 +177,41 @@ public final class NautilusArmorRegistry {
             if (EquipmentConfig.ENABLE_THALLASIUM_NAUTILUS_ARMOR.get()) {
                 THALLASIUM_MATERIAL = ArmorMaterials.register(BETTEREND_MATERIALS, "thallasium_nautilus_armor",
                         5, 14, SoundEvents.ARMOR_EQUIP_IRON, "betterend", "thallasium_ingot", 0.0F, 0.0F);
-                THALLASIUM_NAUTILUS_ARMOR = nautilusArmor(BETTEREND_ITEMS, "thallasium_nautilus_armor",
+                THALLASIUM_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.BETTEREND, "thallasium_nautilus_armor",
                         THALLASIUM_MATERIAL, false);
             }
             if (EquipmentConfig.ENABLE_TERMINITE_NAUTILUS_ARMOR.get()) {
                 TERMINITE_MATERIAL = ArmorMaterials.register(BETTEREND_MATERIALS, "terminite_nautilus_armor",
                         10, 15, SoundEvents.ARMOR_EQUIP_DIAMOND, "betterend", "terminite_ingot", 1.0F, 0.05F);
-                TERMINITE_NAUTILUS_ARMOR = nautilusArmor(BETTEREND_ITEMS, "terminite_nautilus_armor",
+                TERMINITE_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.BETTEREND, "terminite_nautilus_armor",
                         TERMINITE_MATERIAL, false);
             }
             if (EquipmentConfig.ENABLE_AETERNIUM_NAUTILUS_ARMOR.get()) {
                 AETERNIUM_MATERIAL = ArmorMaterials.register(BETTEREND_MATERIALS, "aeternium_nautilus_armor",
                         20, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, "betterend", "aeternium_ingot", 3.5F, 0.2F);
-                AETERNIUM_NAUTILUS_ARMOR = nautilusArmor(BETTEREND_ITEMS, "aeternium_nautilus_armor",
+                AETERNIUM_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.BETTEREND, "aeternium_nautilus_armor",
                         AETERNIUM_MATERIAL, true);
             }
             if (EquipmentConfig.ENABLE_CRYSTALITE_NAUTILUS_ARMOR.get()) {
                 CRYSTALITE_MATERIAL = ArmorMaterials.register(BETTEREND_MATERIALS, "crystalite_nautilus_armor",
                         0, 15, SoundEvents.ARMOR_EQUIP_DIAMOND, "betterend", "eternal_crystal", 0.0F, 0.0F);
-                CRYSTALITE_NAUTILUS_ARMOR = nautilusArmor(BETTEREND_ITEMS, "crystalite_nautilus_armor",
+                CRYSTALITE_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.BETTEREND, "crystalite_nautilus_armor",
                         CRYSTALITE_MATERIAL, false);
+            }
+        }
+
+        if (ModList.get().isLoaded("curiosities")) {
+            if (EquipmentConfig.ENABLE_CURIOSITIES_ALUMINUM_NAUTILUS_ARMOR.get()) {
+                ALUMINUM_MATERIAL = ArmorMaterials.register(CURIOSITIES_MATERIALS, "aluminum_nautilus_armor",
+                        5, 15, SoundEvents.ARMOR_EQUIP_IRON, "curiosities", "aluminum_ingot", 0.0F, 0.0F);
+                ALUMINUM_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CURIOSITIES, "aluminum_nautilus_armor",
+                        ALUMINUM_MATERIAL, false);
+            }
+            if (EquipmentConfig.ENABLE_CURIOSITIES_INVAR_NAUTILUS_ARMOR.get()) {
+                INVAR_MATERIAL = ArmorMaterials.register(CURIOSITIES_MATERIALS, "invar_nautilus_armor",
+                        19, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, "curiosities", "invar_ingot", 1.0F, 0.0F);
+                INVAR_NAUTILUS_ARMOR = nautilusArmor(ItemRegistries.CURIOSITIES, "invar_nautilus_armor",
+                        INVAR_MATERIAL, true);
             }
         }
 
@@ -191,10 +219,7 @@ public final class NautilusArmorRegistry {
         OREGANIZED_MATERIALS.register(modEventBus);
         CAVERNS_MATERIALS.register(modEventBus);
         BETTEREND_MATERIALS.register(modEventBus);
-        MINECRAFT_ITEMS.register(modEventBus);
-        OREGANIZED_ITEMS.register(modEventBus);
-        CAVERNS_ITEMS.register(modEventBus);
-        BETTEREND_ITEMS.register(modEventBus);
+        CURIOSITIES_MATERIALS.register(modEventBus);
     }
 
     // ===== 辅助方法 =====

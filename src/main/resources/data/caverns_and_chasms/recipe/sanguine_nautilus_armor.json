@@ -1,0 +1,17 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:item_exists", "item": "caverns_and_chasms:sanguine_nautilus_armor" },
+    { "type": "equipment_complement:config", "option": "mount_armor_crafting" }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "XXX",
+    " X ",
+    "XXX"
+  ],
+  "key": {
+    "X": { "item": "caverns_and_chasms:living_flesh" }
+  },
+  "result": { "count": 1, "id": "caverns_and_chasms:sanguine_nautilus_armor" }
+}

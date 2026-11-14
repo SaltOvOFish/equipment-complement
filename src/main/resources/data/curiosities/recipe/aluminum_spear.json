@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:item_exists", "item": "curiosities:aluminum_spear" },
+    { "type": "neoforge:item_exists", "item": "curiosities:aluminum_upgrade_smithing_template" },
+    { "type": "neoforge:item_exists", "item": "minecraft:iron_spear" }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "curiosities:aluminum_upgrade_smithing_template" },
+  "base": { "item": "minecraft:iron_spear" },
+  "addition": {"tag":"c:ingots/aluminum"},
+  "result": { "count": 1, "id": "curiosities:aluminum_spear" }
+}

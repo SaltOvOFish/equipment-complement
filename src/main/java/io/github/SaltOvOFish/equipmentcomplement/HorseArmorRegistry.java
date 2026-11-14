@@ -19,7 +19,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
  *
  * <p>注意：融晶（crystalite）马铠的护甲是小数（9.4），而 {@link ArmorMaterial} 的
  * 防御值是 int，因此其材质防御为 0，实际护甲/韧性/击退抗性由
- * {@link ArmorAttributeEvents} 用属性修正写入。</p>
+ * {@link ItemAttributeEvents} 用属性修正写入。</p>
  *
  * <p>护甲材质统一由 {@link ArmorMaterials} 构造（「只有 BODY 有防御值 + 单贴图层」）。</p>
  */
@@ -28,10 +28,6 @@ public final class HorseArmorRegistry {
     private static final DeferredRegister<ArmorMaterial> ARMOR_MATERIALS =
             DeferredRegister.create(Registries.ARMOR_MATERIAL, EquipmentComplement.MOD_ID);
 
-    private static final DeferredRegister.Items MINECRAFT_ITEMS = DeferredRegister.createItems("minecraft");
-    private static final DeferredRegister.Items OREGANIZED_ITEMS = DeferredRegister.createItems("oreganized");
-    private static final DeferredRegister.Items BETTEREND_ITEMS = DeferredRegister.createItems("betterend");
-
     // ===== 材质 =====
     public static DeferredHolder<ArmorMaterial, ArmorMaterial> CHAINMAIL_MATERIAL;
     public static DeferredHolder<ArmorMaterial, ArmorMaterial> SILVER_MATERIAL;
@@ -39,8 +35,11 @@ public final class HorseArmorRegistry {
     public static DeferredHolder<ArmorMaterial, ArmorMaterial> THALLASIUM_MATERIAL;
     public static DeferredHolder<ArmorMaterial, ArmorMaterial> TERMINITE_MATERIAL;
     public static DeferredHolder<ArmorMaterial, ArmorMaterial> AETERNIUM_MATERIAL;
-    /** 融晶：防御值走 {@link ArmorAttributeEvents}，材质本身不提供面板数值。 */
+    /** 融晶：防御值走 {@link ItemAttributeEvents}，材质本身不提供面板数值。 */
     public static DeferredHolder<ArmorMaterial, ArmorMaterial> CRYSTALITE_MATERIAL;
+    public static DeferredHolder<ArmorMaterial, ArmorMaterial> ALUMINUM_MATERIAL;
+    public static DeferredHolder<ArmorMaterial, ArmorMaterial> INVAR_MATERIAL;
+    public static DeferredHolder<ArmorMaterial, ArmorMaterial> SANGUINE_MATERIAL;
 
     // ===== 马铠物品 =====
     public static DeferredItem<Item> CHAINMAIL_HORSE_ARMOR;
@@ -50,6 +49,9 @@ public final class HorseArmorRegistry {
     public static DeferredItem<Item> TERMINITE_HORSE_ARMOR;
     public static DeferredItem<Item> AETERNIUM_HORSE_ARMOR;
     public static DeferredItem<Item> CRYSTALITE_HORSE_ARMOR;
+    public static DeferredItem<Item> ALUMINUM_HORSE_ARMOR;
+    public static DeferredItem<Item> INVAR_HORSE_ARMOR;
+    public static DeferredItem<Item> SANGUINE_HORSE_ARMOR;
 
     private HorseArmorRegistry() {
     }
@@ -58,7 +60,7 @@ public final class HorseArmorRegistry {
         if (EquipmentConfig.ENABLE_CHAINMAIL_HORSE_ARMOR.get()) {
             CHAINMAIL_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "chainmail_horse_armor",
                     5, 12, SoundEvents.ARMOR_EQUIP_CHAIN, "minecraft", "iron_ingot", 0.0F, 0.0F);
-            CHAINMAIL_HORSE_ARMOR = horseArmor(MINECRAFT_ITEMS, "chainmail_horse_armor",
+            CHAINMAIL_HORSE_ARMOR = horseArmor(ItemRegistries.MINECRAFT, "chainmail_horse_armor",
                     CHAINMAIL_MATERIAL, "horse_armor_chainmail.png", false);
         }
 
@@ -66,13 +68,13 @@ public final class HorseArmorRegistry {
             if (EquipmentConfig.ENABLE_SILVER_HORSE_ARMOR.get()) {
                 SILVER_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "silver_horse_armor",
                         6, 25, SoundEvents.ARMOR_EQUIP_GOLD, "oreganized", "silver_ingot", 0.0F, 0.0F);
-                SILVER_HORSE_ARMOR = horseArmor(OREGANIZED_ITEMS, "silver_horse_armor",
+                SILVER_HORSE_ARMOR = horseArmor(ItemRegistries.OREGANIZED, "silver_horse_armor",
                         SILVER_MATERIAL, "horse_armor_silver.png", false);
             }
             if (EquipmentConfig.ENABLE_ELECTRUM_HORSE_ARMOR.get()) {
                 ELECTRUM_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "electrum_horse_armor",
                         19, 22, SoundEvents.ARMOR_EQUIP_GOLD, "oreganized", "electrum_ingot", 2.0F, 0.0F);
-                ELECTRUM_HORSE_ARMOR = horseArmor(OREGANIZED_ITEMS, "electrum_horse_armor",
+                ELECTRUM_HORSE_ARMOR = horseArmor(ItemRegistries.OREGANIZED, "electrum_horse_armor",
                         ELECTRUM_MATERIAL, "horse_armor_electrum.png", false);
             }
         }
@@ -81,33 +83,53 @@ public final class HorseArmorRegistry {
             if (EquipmentConfig.ENABLE_THALLASIUM_HORSE_ARMOR.get()) {
                 THALLASIUM_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "thallasium_horse_armor",
                         5, 14, SoundEvents.ARMOR_EQUIP_IRON, "betterend", "thallasium_ingot", 0.0F, 0.0F);
-                THALLASIUM_HORSE_ARMOR = horseArmor(BETTEREND_ITEMS, "thallasium_horse_armor",
+                THALLASIUM_HORSE_ARMOR = horseArmor(ItemRegistries.BETTEREND, "thallasium_horse_armor",
                         THALLASIUM_MATERIAL, "horse_armor_thallasium.png", false);
             }
             if (EquipmentConfig.ENABLE_TERMINITE_HORSE_ARMOR.get()) {
                 TERMINITE_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "terminite_horse_armor",
                         10, 15, SoundEvents.ARMOR_EQUIP_DIAMOND, "betterend", "terminite_ingot", 1.0F, 0.05F);
-                TERMINITE_HORSE_ARMOR = horseArmor(BETTEREND_ITEMS, "terminite_horse_armor",
+                TERMINITE_HORSE_ARMOR = horseArmor(ItemRegistries.BETTEREND, "terminite_horse_armor",
                         TERMINITE_MATERIAL, "horse_armor_terminite.png", false);
             }
             if (EquipmentConfig.ENABLE_AETERNIUM_HORSE_ARMOR.get()) {
                 AETERNIUM_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "aeternium_horse_armor",
                         20, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, "betterend", "aeternium_ingot", 3.5F, 0.2F);
-                AETERNIUM_HORSE_ARMOR = horseArmor(BETTEREND_ITEMS, "aeternium_horse_armor",
+                AETERNIUM_HORSE_ARMOR = horseArmor(ItemRegistries.BETTEREND, "aeternium_horse_armor",
                         AETERNIUM_MATERIAL, "horse_armor_aeternium.png", true);
             }
             if (EquipmentConfig.ENABLE_CRYSTALITE_HORSE_ARMOR.get()) {
                 CRYSTALITE_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "crystalite_horse_armor",
                         0, 15, SoundEvents.ARMOR_EQUIP_DIAMOND, "betterend", "eternal_crystal", 0.0F, 0.0F);
-                CRYSTALITE_HORSE_ARMOR = horseArmor(BETTEREND_ITEMS, "crystalite_horse_armor",
+                CRYSTALITE_HORSE_ARMOR = horseArmor(ItemRegistries.BETTEREND, "crystalite_horse_armor",
                         CRYSTALITE_MATERIAL, "horse_armor_crystalite.png", false);
             }
         }
 
+        if (ModList.get().isLoaded("curiosities")) {
+            if (EquipmentConfig.ENABLE_CURIOSITIES_ALUMINUM_HORSE_ARMOR.get()) {
+                ALUMINUM_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "aluminum_horse_armor",
+                        5, 15, SoundEvents.ARMOR_EQUIP_IRON, "curiosities", "aluminum_ingot", 0.0F, 0.0F);
+                ALUMINUM_HORSE_ARMOR = horseArmor(ItemRegistries.CURIOSITIES, "aluminum_horse_armor",
+                        ALUMINUM_MATERIAL, "horse_armor_aluminum.png", false);
+            }
+            if (EquipmentConfig.ENABLE_CURIOSITIES_INVAR_HORSE_ARMOR.get()) {
+                INVAR_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "invar_horse_armor",
+                        19, 15, SoundEvents.ARMOR_EQUIP_NETHERITE, "curiosities", "invar_ingot", 1.0F, 0.0F);
+                INVAR_HORSE_ARMOR = horseArmor(ItemRegistries.CURIOSITIES, "invar_horse_armor",
+                        INVAR_MATERIAL, "horse_armor_invar.png", true);
+            }
+        }
+        if (ModList.get().isLoaded("caverns_and_chasms")) {
+            if (EquipmentConfig.ENABLE_CANDC_SANGUINE_HORSE_ARMOR.get()) {
+                SANGUINE_MATERIAL = ArmorMaterials.register(ARMOR_MATERIALS, "sanguine_horse_armor",
+                        10, 17, SoundEvents.ARMOR_EQUIP_NETHERITE, "caverns_and_chasms", "living_flesh", 1.0F, 0.0F);
+                SANGUINE_HORSE_ARMOR = horseArmor(ItemRegistries.CAVERNS_AND_CHASMS, "sanguine_horse_armor",
+                        SANGUINE_MATERIAL, "horse_armor_sanguine.png", false);
+            }
+        }
+
         ARMOR_MATERIALS.register(modEventBus);
-        MINECRAFT_ITEMS.register(modEventBus);
-        OREGANIZED_ITEMS.register(modEventBus);
-        BETTEREND_ITEMS.register(modEventBus);
     }
 
     // ===== 辅助方法 =====

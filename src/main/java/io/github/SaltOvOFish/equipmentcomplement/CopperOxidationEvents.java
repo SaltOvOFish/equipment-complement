@@ -34,13 +34,17 @@ public class CopperOxidationEvents {
 
     @SubscribeEvent
     public static void onServerTick(ServerTickEvent.Post event) {
+        // 兜底：合成取料若中途抛异常，ResultSlotMixin 的 RETURN 注入不会执行，
+        // 这里在 tick 末尾无条件清除，避免合成结果永久停止刷新。
+        CraftingRecomputeGuard.reset();
+
         for (ServerLevel level : event.getServer().getAllLevels()) {
             // 没有玩家的维度里实体本来就不 tick，直接跳过
             if (level.players().isEmpty()) continue;
 
             long time = level.getGameTime();
             boolean oxidize = time % 60L == 0L && CopperOxidation.anyEnabled();
-            boolean mountArmor = time % 20L == 0L;
+            boolean mountArmor = time % 20L == 0L && MountArmorEffects.anyEnabled();
             if (!oxidize && !mountArmor) continue;
 
             for (Entity entity : level.getAllEntities()) {
@@ -52,7 +56,7 @@ public class CopperOxidationEvents {
                     }
                 }
                 if (mountArmor) {
-                    MountArmorEffects.refreshCrystaliteRegeneration(living);
+                    MountArmorEffects.refreshMountArmorEffects(living);
                 }
             }
         }

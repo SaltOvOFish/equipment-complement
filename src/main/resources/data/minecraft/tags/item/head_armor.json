@@ -1,15 +1,9 @@
 {
   "replace": false,
-  "remove": [
-    "betterend:crystalite_helmet",
-    "betterend:crystalite_chestplate",
-    "betterend:crystalite_leggings",
-    "betterend:crystalite_boots"
-  ],
   "values": [
-    "betterend:aeternium_helmet",
-    "betterend:terminite_helmet",
-    "betterend:thallasium_helmet",
+    { "id": "betterend:aeternium_helmet", "required": false },
+    { "id": "betterend:terminite_helmet", "required": false },
+    { "id": "betterend:thallasium_helmet", "required": false },
     { "id": "minecraft:exposed_copper_helmet", "required": false },
     { "id": "minecraft:oxidized_copper_helmet", "required": false },
     { "id": "minecraft:waxed_copper_helmet", "required": false },

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "equipment_complement:config",
+      "option": "vbp_copper_oxidation"
+    }
+  ],
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "pattern": [

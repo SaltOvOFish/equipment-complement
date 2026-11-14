@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:item_exists", "item": "curiosities:invar_nautilus_armor" },
+    { "type": "neoforge:item_exists", "item": "minecraft:netherite_upgrade_smithing_template" },
+    { "type": "neoforge:item_exists", "item": "minecraft:diamond_nautilus_armor" }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "minecraft:netherite_upgrade_smithing_template" },
+  "base": { "item": "minecraft:diamond_nautilus_armor" },
+  "addition": {"tag":"c:ingots/invar"},
+  "result": { "count": 1, "id": "curiosities:invar_nautilus_armor" }
+}

@@ -20,32 +20,28 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
- * 坐骑铠（马铠 + 鹦鹉螺铠）的属性修正。
+ * 本模组物品（长矛 + 马铠 + 鹦鹉螺铠）的属性修饰符派发。
  *
  * <p>包含两部分：</p>
  * <ul>
- *     <li><b>附加效果</b>：在此基础上叠加其它模组的属性
- *         （Oreganized 无敌帧、Caverns &amp; Chasms 魔法保护 / 缓慢回馈）。</li>
- *     <li><b>精确覆盖</b>：融晶铠甲的护甲是小数、C&amp;C 死灵合金马铠需要被本模组改写数值，
+ *     <li><b>附加效果</b>：在基础属性之上叠加跨模组或特殊属性
+ *         （Oreganized 无敌帧、Caverns &amp; Chasms 魔法保护 / 缓慢回馈、Curiosities 交互距离 / 护甲穿透 / 伤害减免、旅行者/琥珀金移速与跳跃）。</li>
+ *     <li><b>精确覆盖</b>：融晶铠甲的护甲是小数、C&amp;C 死灵合金 / 下界合金马铠需要重写面板，
  *         这些用 {@code clearModifiers()} 清空后重写，避免叠加。</li>
  * </ul>
  *
- * <p><b>性能</b>：本事件在**每次生成带属性修饰符的物品 tooltip 时都会触发**——
- * 链路是 {@code AbstractContainerScreen.render → getTooltipFromContainerItem →
- * ItemStack.getTooltipLines → AttributeUtil.addAttributeTooltips → forEachModifier}，
- * 也就是说悬停盔甲 / 工具 / 武器时**每帧一次**。因此这里：</p>
+ * <p><b>性能</b>：本事件在每次生成带属性修饰符的物品 tooltip 时都会触发（悬停装备时每帧一次）：</p>
  * <ol>
- *   <li>物品派发只做**一次 {@link IdentityHashMap} 查表**，不再是十几次 {@code stack.is(...)}；</li>
- *   <li>所有 {@link AttributeModifier}（含其 id）预先构造成 {@code static final} 常量，
- *       事件里只做 {@code addModifier}，**不产生任何对象分配**；</li>
- *   <li>跨模组属性只在构建派发表时解析一次（不存在就是 {@code null}，直接跳过），
- *       之后由 lambda 捕获，事件里不再查注册表。</li>
+ *   <li>物品派发只做一次 {@link IdentityHashMap} 查表；</li>
+ *   <li>所有 {@link AttributeModifier}（含其 id）预先构造成 {@code static final} 常量，事件内零分配；</li>
+ *   <li>跨模组属性只在首次建表时解析一次，之后由 lambda 捕获。</li>
  * </ol>
  */
 @EventBusSubscriber(modid = EquipmentComplement.MOD_ID)
-public class ArmorAttributeEvents {
+public class ItemAttributeEvents {
 
     private static final EquipmentSlotGroup BODY = EquipmentSlotGroup.BODY;
+    private static final EquipmentSlotGroup MAINHAND = EquipmentSlotGroup.MAINHAND;
 
     // ==================== 预构造的属性修饰符（含 id 字符串，全部只构造一次） ====================
     private static final AttributeModifier SILVER_HORSE_ARMOR_INVINCIBILITY =
@@ -86,6 +82,22 @@ public class ArmorAttributeEvents {
     private static final AttributeModifier COPPER_NAUTILUS_ARMOR_SLOWNESS =
             multipliedBase("copper_nautilus_armor_slowness", -0.2D);
 
+    // ==================== Curiosities 兼容效果 ====================
+    /** 铝矛：+2 实体交互距离（近战突刺距离另见 {@link SpearRegistry#onModifyComponents}）。 */
+    private static final AttributeModifier ALUMINUM_SPEAR_ENTITY_RANGE =
+            add("aluminum_spear_entity_range", 2.0D);
+    /** 殷钢矛：+15% 护甲穿透（curiosities 属性，基准 1.0）。 */
+    private static final AttributeModifier INVAR_SPEAR_ARMOR_PIERCING =
+            multipliedBase("invar_spear_armor_piercing", 0.15D);
+    /** 旅行者坐骑铠（铝）：+15% 移动速度、+15% 跳跃力度（鹦鹉螺骑乘冲刺同步按跳跃力度加成，见 AbstractNautilusMixin）。 */
+    private static final AttributeModifier TRAVELER_MOUNT_ARMOR_SPEED =
+            multipliedBase("traveler_mount_armor_speed", 0.15D);
+    private static final AttributeModifier TRAVELER_MOUNT_ARMOR_JUMP =
+            multipliedBase("traveler_mount_armor_jump", 0.15D);
+    /** 殷钢坐骑铠：0.25 点伤害减免（curiosities 属性，直接减免）。 */
+    private static final AttributeModifier INVAR_MOUNT_ARMOR_DAMAGE_REDUCTION =
+            add("invar_mount_armor_damage_reduction", 0.25D);
+
     // ==================== 物品 → 处理函数 ====================
     @FunctionalInterface
     private interface Handler {
@@ -112,21 +124,34 @@ public class ArmorAttributeEvents {
         final Holder<Attribute> invincibility = attribute("oreganized", "invincibility_frames");
         final Holder<Attribute> magicProtection = attribute("caverns_and_chasms", "magic_protection");
         final Holder<Attribute> slownessRetribution = attribute("caverns_and_chasms", "slowness_retribution");
+        final Holder<Attribute> armorPiercing = attribute("curiosities", "armor_piercing");
+        final Holder<Attribute> damageReduction = attribute("curiosities", "damage_reduction");
 
         Map<Item, Handler> map = new IdentityHashMap<>();
 
+        // ==================== 长矛 ====================
+        put(map, SpearRegistry.CURIOSITIES_ALUMINUM_SPEAR,
+                event -> event.addModifier(Attributes.ENTITY_INTERACTION_RANGE, ALUMINUM_SPEAR_ENTITY_RANGE, MAINHAND));
+        put(map, SpearRegistry.CURIOSITIES_INVAR_SPEAR, event -> {
+            if (armorPiercing != null) event.addModifier(armorPiercing, INVAR_SPEAR_ARMOR_PIERCING, MAINHAND);
+        });
+
         // ==================== 马铠 ====================
-        // Oreganized 银马铠：+0.2 无敌帧
         put(map, HorseArmorRegistry.SILVER_HORSE_ARMOR,
                 event -> addAttribute(event, invincibility, SILVER_HORSE_ARMOR_INVINCIBILITY));
-        // Oreganized 琥珀金马铠：+5% 移动速度
         put(map, HorseArmorRegistry.ELECTRUM_HORSE_ARMOR,
                 event -> event.addModifier(Attributes.MOVEMENT_SPEED, ELECTRUM_HORSE_ARMOR_SPEED, BODY));
-        // BetterEnd 融晶马铠：护甲 9.4 / 韧性 0.96 / 抗击退 0（+1 生命恢复见 MountArmorEffects）
+        put(map, HorseArmorRegistry.ALUMINUM_HORSE_ARMOR, event -> {
+            event.addModifier(Attributes.MOVEMENT_SPEED, TRAVELER_MOUNT_ARMOR_SPEED, BODY);
+            event.addModifier(Attributes.JUMP_STRENGTH, TRAVELER_MOUNT_ARMOR_JUMP, BODY);
+        });
+        put(map, HorseArmorRegistry.INVAR_HORSE_ARMOR, event -> {
+            if (damageReduction != null) event.addModifier(damageReduction, INVAR_MOUNT_ARMOR_DAMAGE_REDUCTION, BODY);
+        });
+        // BetterEnd 融晶马铠：护甲 9.4 / 韧性 0.96 / 抗击退 0（+1 生命恢复见 MountArmorEffects；血裔同理）
         put(map, HorseArmorRegistry.CRYSTALITE_HORSE_ARMOR,
                 event -> setExact(event, CRYSTALITE_HORSE_ARMOR_ARMOR, CRYSTALITE_HORSE_ARMOR_TOUGHNESS));
-        // Caverns & Chasms 死灵合金马铠：护甲 19 / 韧性 2 / 抗击退 0 / 缓慢回馈 +1
-        // Caverns & Chasms 下界合金马铠：数值提升到与 VanillaBackport 版本一致（19 / 3.0 / 0.1）
+        // Caverns & Chasms 死灵合金马铠 / 下界合金马铠面板对齐
         if (CavernsAndChasmsCompat.isLoaded()) {
             put(map, CavernsAndChasmsCompat.necromiumHorseArmor(), event -> {
                 setExact(event, NECROMIUM_HORSE_ARMOR_ARMOR, NECROMIUM_HORSE_ARMOR_TOUGHNESS);
@@ -141,21 +166,22 @@ public class ArmorAttributeEvents {
         }
 
         // ==================== 鹦鹉螺铠 ====================
-        // Oreganized 银鹦鹉螺铠：+0.2 无敌帧
         put(map, NautilusArmorRegistry.OREGANIZED_SILVER_NAUTILUS_ARMOR,
                 event -> addAttribute(event, invincibility, SILVER_NAUTILUS_ARMOR_INVINCIBILITY));
-        // Caverns & Chasms 银鹦鹉螺铠：魔法保护 +0.4（与 C&C 银马铠一致）
         put(map, NautilusArmorRegistry.CANDC_SILVER_NAUTILUS_ARMOR,
                 event -> addAttribute(event, magicProtection, SILVER_NAUTILUS_ARMOR_MAGIC_PROTECTION));
-        // Oreganized 琥珀金鹦鹉螺铠：+5% 移动速度
         put(map, NautilusArmorRegistry.OREGANIZED_ELECTRUM_NAUTILUS_ARMOR,
                 event -> event.addModifier(Attributes.MOVEMENT_SPEED, ELECTRUM_NAUTILUS_ARMOR_SPEED, BODY));
-        // Caverns & Chasms 死灵合金鹦鹉螺铠：缓慢回馈 +1
+        put(map, NautilusArmorRegistry.ALUMINUM_NAUTILUS_ARMOR, event -> {
+            event.addModifier(Attributes.MOVEMENT_SPEED, TRAVELER_MOUNT_ARMOR_SPEED, BODY);
+            event.addModifier(Attributes.JUMP_STRENGTH, TRAVELER_MOUNT_ARMOR_JUMP, BODY);
+        });
+        put(map, NautilusArmorRegistry.INVAR_NAUTILUS_ARMOR, event -> {
+            if (damageReduction != null) event.addModifier(damageReduction, INVAR_MOUNT_ARMOR_DAMAGE_REDUCTION, BODY);
+        });
         put(map, NautilusArmorRegistry.CANDC_NECROMIUM_NAUTILUS_ARMOR,
                 event -> addAttribute(event, slownessRetribution, NECROMIUM_NAUTILUS_ARMOR_SLOWNESS));
-        // Caverns & Chasms 铜鹦鹉螺铠（含氧化 / 涂蜡变体）：移动速度 -20%
         putCopperNautilusArmor(map);
-        // BetterEnd 融晶鹦鹉螺铠：护甲 9.4 / 韧性 0.96 / 抗击退 0
         put(map, NautilusArmorRegistry.CRYSTALITE_NAUTILUS_ARMOR,
                 event -> setExact(event, CRYSTALITE_NAUTILUS_ARMOR_ARMOR, CRYSTALITE_NAUTILUS_ARMOR_TOUGHNESS));
 
@@ -163,10 +189,7 @@ public class ArmorAttributeEvents {
         return map;
     }
 
-    /**
-     * C&C 铜鹦鹉螺铠全部 8 件（铜 / 斑驳 / 锈蚀 / 氧化 + 涂蜡×4）统一 -20% 移动速度。
-     * 与 C&C 铜马铠一样使用 {@code ADD_MULTIPLIED_BASE}，这样骑乘时与 C&C 铜马铠的手感一致。
-     */
+    /** C&C 铜鹦鹉螺铠全部 8 件（铜 / 斑驳 / 锈蚀 / 氧化 + 涂蜡×4）统一 -20% 移动速度。 */
     private static void putCopperNautilusArmor(Map<Item, Handler> map) {
         Handler handler = event -> event.addModifier(Attributes.MOVEMENT_SPEED, COPPER_NAUTILUS_ARMOR_SLOWNESS, BODY);
         put(map, NautilusArmorRegistry.CANDC_COPPER_NAUTILUS_ARMOR, handler);
@@ -181,24 +204,20 @@ public class ArmorAttributeEvents {
 
     // ==================== 工具方法 ====================
 
-    /** 注册一个物品的处理函数（未注册的物品传 null，直接跳过）。 */
     private static void put(Map<Item, Handler> map, DeferredItem<Item> holder, Handler handler) {
         if (holder != null) map.put(holder.get(), handler);
     }
 
-    /** 原生物品（例如 C&C 自带的死灵合金马铠）：解析不到或为空气时跳过。 */
     private static void put(Map<Item, Handler> map, Item item, Handler handler) {
         if (item != null && item != Items.AIR) map.put(item, handler);
     }
 
-    /** 追加一条修饰符（属性解析不到时跳过）。 */
     private static void addAttribute(ItemAttributeModifierEvent event, Holder<Attribute> attribute,
             AttributeModifier modifier) {
         if (attribute == null) return;
         event.addModifier(attribute, modifier, BODY);
     }
 
-    /** 清空后精确写入护甲 / 韧性（抗击退是 0，等于不写入，避免出现「+0」）。 */
     private static void setExact(ItemAttributeModifierEvent event, AttributeModifier armor,
             AttributeModifier toughness) {
         event.clearModifiers();
@@ -218,7 +237,6 @@ public class ArmorAttributeEvents {
         return new AttributeModifier(id(path), amount, AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
     }
 
-    /** 按 id 解析属性；解析不到返回 {@code null}（只在建表时调用，调用方需容忍 null）。 */
     private static Holder<Attribute> attribute(String namespace, String path) {
         return BuiltInRegistries.ATTRIBUTE.getHolder(
                 ResourceKey.create(Registries.ATTRIBUTE, ResourceLocation.fromNamespaceAndPath(namespace, path)))

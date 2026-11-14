@@ -6,6 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.neoforged.fml.ModList;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.conditions.ICondition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 数据包条件：读取本模组启动配置里的布尔开关。
@@ -21,6 +23,8 @@ import net.neoforged.neoforge.common.conditions.ICondition;
  */
 public record ConfigCondition(String option, boolean expected) implements ICondition {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger("equipment_complement");
+
     public static final MapCodec<ConfigCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.STRING.fieldOf("option").forGetter(ConfigCondition::option),
             Codec.BOOL.optionalFieldOf("expected", true).forGetter(ConfigCondition::expected)
@@ -34,7 +38,12 @@ public record ConfigCondition(String option, boolean expected) implements ICondi
             return true;
         }
         ModConfigSpec.BooleanValue value = EquipmentConfig.booleanOption(option);
-        return value != null && value.get() == expected;
+        if (value == null) {
+            // 拼错开关名会让配方静默失效，这里只会在数据包加载时警告一次。
+            LOGGER.warn("[equipment_complement] unknown config option in recipe condition: {}", option);
+            return false;
+        }
+        return value.get() == expected;
     }
 
     @Override

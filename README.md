@@ -16,7 +16,9 @@
 | [Platform](https://github.com/ItsBlackGear/Platform) | 必装 | **1.4**（已在 1.4.2 测试） | VanillaBackport 的库依赖 / 物品渲染器 API |
 | [BetterEnd](https://modrinth.com/mod/betterend) | 可选 | 21.0.x | 塔拉斯金 / 终末合金 / 融晶 / 太古合金材质 |
 | [Oreganized](https://modrinth.com/mod/oreganized) | 可选 | 5.x | 银 / 琥珀金材质 |
-| [Caverns & Chasms](https://modrinth.com/mod/caverns-and-chasms) | 可选 | 3.x | 银 / 铜 / 死灵合金材质；需要 Blueprint |
+| [Caverns & Chasms](https://modrinth.com/mod/caverns-and-chasms) | 可选 | 3.x | 银 / 铜 / 死灵合金 / 血裔材质；需要 Blueprint |
+| [Curiosities](https://modrinth.com/mod/curiosities) | 可选 | 0.2.x | 铝（旅行者） / 殷钢材质；需要 Blueprint |
+| [Legendary Monsters](https://modrinth.com/mod/legendary-monsters) | 可选 | 2.2.x | 终末金属长矛 |
 
 未安装可选模组时，对应物品、配方与配置项不会注册，不影响其余内容。
 
@@ -24,14 +26,16 @@
 
 ### 长矛
 
-- 为 Oreganized、Caverns & Chasms、BetterEnd 的多种材质补充长矛。
-- 包含银、琥珀金、死灵合金、塔拉斯金、终末合金、太古合金，以及 BetterEnd 的矛头。
+- 为 Oreganized、Caverns & Chasms、BetterEnd、Curiosities、Legendary Monsters 补充多种材质长矛。
+- 包含银、琥珀金、死灵合金、塔拉斯金、终末合金、太古合金、铝、殷钢、终末金属，以及 BetterEnd 的矛头。
+- 铝矛附带 +2 实体交互距离与 +2 攻击触及；殷钢矛附带 +15% 护甲穿透。
 - 所有长矛统一使用 `bettercombat:spear` 武器属性。
 - 铜矛包含氧化 / 涂蜡变体。
 
 ### 马铠
 
-- 补充锁链、银（Oreganized）、琥珀金、塔拉斯金、终末合金、融晶、太古合金马铠。
+- 补充锁链、银（Oreganized）、琥珀金、旅行者（铝）、殷钢、血裔、塔拉斯金、终末合金、融晶、太古合金马铠。
+- 旅行者马铠提供 +15% 移速与 +15% 跳跃力度；殷钢马铠提供 0.25 伤害减免；血裔与融晶马铠提供生命恢复 I。
 - 下界合金马铠支持在 VanillaBackport 版与 Caverns & Chasms 版之间二选一：
   - 默认使用 VanillaBackport 版；
   - 开启 `candc_netherite_horse_armor` 后改用 C&C 版，并隐藏 / 禁用另一版的获取方式；
@@ -40,7 +44,8 @@
 
 ### 鹦鹉螺铠
 
-- 补充皮革、锁链、银（Oreganized / C&C）、铜（C&C）、死灵合金、塔拉斯金、终末合金、融晶、太古合金鹦鹉螺铠。
+- 补充皮革、锁链、银（Oreganized / C&C）、铜（C&C）、死灵合金、血裔、旅行者（铝）、殷钢、塔拉斯金、终末合金、融晶、太古合金鹦鹉螺铠。
+- 旅行者鹦鹉螺铠提供 +15% 移速与 +15% 跳跃力度（提高骑乘蓄力冲刺距离 / 跃出高度）；殷钢鹦鹉螺铠提供 0.25 伤害减免；血裔与融晶鹦鹉螺铠提供生命恢复 I。
 - 皮革鹦鹉螺铠可像皮革盔甲一样用染料染色，支持混色。
 - C&C 铜鹦鹉螺铠包含氧化 / 涂蜡变体，并带有与 C&C 铜马铠一致的移动速度惩罚。
 - 锁链鹦鹉螺铠会出现在林地府邸与盔甲匠礼物战利品中。
@@ -68,7 +73,7 @@
 - 鹦鹉螺铠工作台形状：`XXX / ·X· / XXX`
 - 皮革马铠与皮革鹦鹉螺铠**始终可以合成**，并可在皮匠专家级交易中以 6 个绿宝石购买随机染色版本。
 - 其余新增的工作台坐骑铠配方受 `mount_armor_crafting` 控制；关闭后这些配方会从工作台 / JEI 中消失。
-- 锻造台配方（下界合金、终末合金、琥珀金、死灵合金）与融晶灌注配方**不受** `mount_armor_crafting` 影响。
+- 锻造台配方（下界合金、终末合金、琥珀金、死灵合金、铝 / 旅行者、殷钢、终末金属）与融晶灌注配方**不受** `mount_armor_crafting` 影响。
 - 完整的配方与数值请以游戏内 JEI 和物品 tooltip 为准。
 
 ## 配置
@@ -89,7 +94,7 @@
 
 1. 安装 Minecraft 1.21.1 + NeoForge。
 2. 安装必装前置 VanillaBackport ≥ 1.2 与 Platform ≥ 1.4。
-3. 按需安装 BetterEnd / Oreganized / Caverns & Chasms。
+3. 按需安装 BetterEnd / Oreganized / Caverns & Chasms / Curiosities / Legendary Monsters。
 4. 将本模组 jar 放入 `mods/`。
 
 ## 构建
@@ -118,6 +123,7 @@
 - **Caverns & Chasms 下界合金马铠**：两个版本同时只保留一个可正常获取；被隐藏的版本仍注册，可用 `/give` 取得。
 - **坐骑铠耐久**：与原版马铠一致，不设耐久。
 - **配置文件**：STARTUP 类型，改动后需重启。
+- **Mixin**：对 `CraftingMenu` / `ResultSlot` 注入了取料期间暂缓中间状态重算的 Mixin，并对 `AbstractNautilus` 注入了让骑乘蓄力冲刺额外读取 `jump_strength` 倍率的 Mixin。
 
 ## 许可证与致谢
 
@@ -131,6 +137,8 @@
 - **paulevsGitch / Raijin**：BetterEnd。
 - **TeamGalena**：Oreganized。
 - **Team Abnormals**：Caverns & Chasms。
+- **SyndicateMC**：Curiosities。
+- **Miauczel**：Legendary Monsters。
 - **Unknowneth**：Backported Spears。
 
 如果你认为本仓库中有素材归属标注遗漏，请通过仓库 Issue 联系，我们会核实并替换或移除相关内容。

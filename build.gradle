@@ -25,6 +25,12 @@ base {
     archivesName = mod_id
 }
 
+jar {
+    manifest {
+        attributes('MixinConfigs': 'equipment_complement.mixins.json')
+    }
+}
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {

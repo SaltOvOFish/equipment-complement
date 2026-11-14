@@ -62,7 +62,6 @@ public final class CopperEquipmentRegistry {
             "exposed", "weathered", "oxidized",
             "waxed", "waxed_exposed", "waxed_weathered", "waxed_oxidized");
 
-    private static final DeferredRegister.Items ITEMS = DeferredRegister.createItems("minecraft");
     private static final DeferredRegister<ArmorMaterial> MATERIALS =
             DeferredRegister.create(Registries.ARMOR_MATERIAL, "minecraft");
 
@@ -86,11 +85,10 @@ public final class CopperEquipmentRegistry {
             if (cavernsAndChasms && piece.equals("ingot")) continue;
             for (String variant : VARIANTS) {
                 String id = variant + "_copper_" + piece;
-                REGISTERED.put(id, ITEMS.register(id, () -> create(piece, variant)));
+                REGISTERED.put(id, ItemRegistries.MINECRAFT.register(id, () -> create(piece, variant)));
             }
         }
         MATERIALS.register(modEventBus);
-        ITEMS.register(modEventBus);
     }
 
     // ==================== 查询 ====================

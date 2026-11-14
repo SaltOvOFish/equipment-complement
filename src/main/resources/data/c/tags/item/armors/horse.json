@@ -56,6 +56,9 @@
     {
       "id": "betterend:aeternium_horse_armor",
       "required": false
-    }
+    },
+    { "id": "curiosities:aluminum_horse_armor", "required": false },
+    { "id": "curiosities:invar_horse_armor", "required": false },
+    { "id": "caverns_and_chasms:sanguine_horse_armor", "required": false }
   ]
 }

@@ -1,6 +1,7 @@
 {
+  "replace": false,
   "values": [
-    "oreganized:silver_spear",
-    "oreganized:electrum_spear"
+    { "id": "oreganized:silver_spear", "required": false },
+    { "id": "oreganized:electrum_spear", "required": false }
   ]
 }

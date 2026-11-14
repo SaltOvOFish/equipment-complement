@@ -100,6 +100,9 @@
     {
       "id": "betterend:crystalite_nautilus_armor",
       "required": false
-    }
+    },
+    { "id": "curiosities:aluminum_nautilus_armor", "required": false },
+    { "id": "curiosities:invar_nautilus_armor", "required": false },
+    { "id": "caverns_and_chasms:sanguine_nautilus_armor", "required": false }
   ]
 }

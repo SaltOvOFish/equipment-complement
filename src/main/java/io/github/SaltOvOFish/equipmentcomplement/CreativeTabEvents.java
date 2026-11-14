@@ -38,6 +38,8 @@ public class CreativeTabEvents {
 
     private static final ResourceKey<CreativeModeTab> BETTEREND_ITEMS = ResourceKey.create(
             Registries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath("betterend", "items_tab"));
+    private static final ResourceKey<CreativeModeTab> LEGENDARY_MONSTERS_TAB = ResourceKey.create(
+            Registries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath("legendary_monsters", "legendary_monsterstab"));
 
     public static void onCreativeTab(BuildCreativeModeTabContentsEvent event) {
         TabEditor tab = new TabEditor(event);
@@ -56,6 +58,8 @@ public class CreativeTabEvents {
             buildCombat(tab);
         } else if (isBetterEndItemsTab(event.getTabKey())) {
             buildBetterEndItems(tab);
+        } else if (event.getTabKey() == LEGENDARY_MONSTERS_TAB) {
+            buildLegendaryMonsters(tab);
         }
 
         // VBP 铜制品的氧化 / 涂蜡变体：跟在各自基础件后面（工具页 / 战斗用品页 / 材料页通用）
@@ -125,20 +129,22 @@ public class CreativeTabEvents {
 
     private static void buildCombat(TabEditor tab) {
         // ---------- 长矛：铜(VBP) → 铜(C&C) → 铁 → 金 → 银(Oreg) → 银(C&C) → 钻 → 琥珀金 → 下界 → 死灵(C&C) ----------
-        Item anchor = tab.chain(mc("copper_spear"), EquipmentComplement.CANDC_COPPER_SPEAR);
+        Item anchor = tab.chain(mc("copper_spear"), SpearRegistry.CANDC_COPPER_SPEAR);
         if (EquipmentConfig.COPPER_VARIANTS_IN_TAB.get()) {
-            anchor = tab.chain(anchor, EquipmentComplement.CANDC_EXPOSED_COPPER_SPEAR);
-            anchor = tab.chain(anchor, EquipmentComplement.CANDC_WEATHERED_COPPER_SPEAR);
-            anchor = tab.chain(anchor, EquipmentComplement.CANDC_OXIDIZED_COPPER_SPEAR);
-            anchor = tab.chain(anchor, EquipmentComplement.CANDC_WAXED_COPPER_SPEAR);
-            anchor = tab.chain(anchor, EquipmentComplement.CANDC_WAXED_EXPOSED_COPPER_SPEAR);
-            anchor = tab.chain(anchor, EquipmentComplement.CANDC_WAXED_WEATHERED_COPPER_SPEAR);
-            tab.chain(anchor, EquipmentComplement.CANDC_WAXED_OXIDIZED_COPPER_SPEAR);
+            anchor = tab.chain(anchor, SpearRegistry.CANDC_EXPOSED_COPPER_SPEAR);
+            anchor = tab.chain(anchor, SpearRegistry.CANDC_WEATHERED_COPPER_SPEAR);
+            anchor = tab.chain(anchor, SpearRegistry.CANDC_OXIDIZED_COPPER_SPEAR);
+            anchor = tab.chain(anchor, SpearRegistry.CANDC_WAXED_COPPER_SPEAR);
+            anchor = tab.chain(anchor, SpearRegistry.CANDC_WAXED_EXPOSED_COPPER_SPEAR);
+            anchor = tab.chain(anchor, SpearRegistry.CANDC_WAXED_WEATHERED_COPPER_SPEAR);
+            tab.chain(anchor, SpearRegistry.CANDC_WAXED_OXIDIZED_COPPER_SPEAR);
         }
-        anchor = tab.chain(mc("golden_spear"), EquipmentComplement.OREGANIZED_SILVER_SPEAR);
-        anchor = tab.chain(anchor, EquipmentComplement.CANDC_SILVER_SPEAR);
-        anchor = tab.chain(mc("diamond_spear"), EquipmentComplement.OREGANIZED_ELECTRUM_SPEAR);
-        tab.chain(mc("netherite_spear"), EquipmentComplement.CANDC_NECROMIUM_SPEAR);
+        anchor = tab.chain(mc("golden_spear"), SpearRegistry.CURIOSITIES_ALUMINUM_SPEAR);
+        anchor = tab.chain(anchor, SpearRegistry.OREGANIZED_SILVER_SPEAR);
+        anchor = tab.chain(anchor, SpearRegistry.CANDC_SILVER_SPEAR);
+        anchor = tab.chain(mc("diamond_spear"), SpearRegistry.CURIOSITIES_INVAR_SPEAR);
+        anchor = tab.chain(anchor, SpearRegistry.OREGANIZED_ELECTRUM_SPEAR);
+        tab.chain(mc("netherite_spear"), SpearRegistry.CANDC_NECROMIUM_SPEAR);
 
         // ---------- 马铠：铜(VBP) → 铜(C&C) → 锁链 → 铁 → 金 → 银(Oreg) → 银(C&C) → 钻 → 琥珀金 → 下界 → 死灵(C&C) ----------
         Item candcCopperHorse = null;
@@ -154,15 +160,19 @@ public class CreativeTabEvents {
         }
         anchor = tab.insert(mc("copper_horse_armor"), candcCopperHorse);
         anchor = tab.chain(anchor, HorseArmorRegistry.CHAINMAIL_HORSE_ARMOR);
-        anchor = tab.chain(mc("golden_horse_armor"), HorseArmorRegistry.SILVER_HORSE_ARMOR);
+        anchor = tab.chain(mc("golden_horse_armor"), HorseArmorRegistry.ALUMINUM_HORSE_ARMOR);
+        anchor = tab.chain(anchor, HorseArmorRegistry.SILVER_HORSE_ARMOR);
         anchor = tab.insert(anchor, candcSilverHorse);
-        anchor = tab.chain(mc("diamond_horse_armor"), HorseArmorRegistry.ELECTRUM_HORSE_ARMOR);
+        anchor = tab.chain(mc("diamond_horse_armor"), HorseArmorRegistry.INVAR_HORSE_ARMOR);
+        anchor = tab.chain(anchor, HorseArmorRegistry.ELECTRUM_HORSE_ARMOR);
         // 开启 C&C 下界合金马铠时，死灵合金马铠的锚点要换成 C&C 版
         Item netheriteHorseAnchor = EquipmentConfig.CANDC_NETHERITE_HORSE_ARMOR.get()
                 && candcNetheriteHorse != null && candcNetheriteHorse != Items.AIR
                 ? candcNetheriteHorse
                 : mc("netherite_horse_armor");
         tab.insert(netheriteHorseAnchor, candcNecromiumHorse);
+        tab.chain(candcNecromiumHorse != null ? candcNecromiumHorse : netheriteHorseAnchor,
+                HorseArmorRegistry.SANGUINE_HORSE_ARMOR);
 
         // ---------- 鹦鹉螺铠：皮革 → 铜(VBP) → 铜(C&C) → 锁链 → 铁 → 金 → 银(Oreg) → 银(C&C) → 钻 → 琥珀金 → 下界 → 死灵(C&C) ----------
         // 皮革款（本模组新增）放在 VBP 铜鹦鹉螺铠之前
@@ -178,24 +188,33 @@ public class CreativeTabEvents {
             anchor = tab.chain(anchor, NautilusArmorRegistry.CANDC_WAXED_OXIDIZED_COPPER_NAUTILUS_ARMOR);
         }
         anchor = tab.chain(anchor, NautilusArmorRegistry.CHAINMAIL_NAUTILUS_ARMOR);
+        anchor = tab.chain(mc("golden_nautilus_armor"), NautilusArmorRegistry.ALUMINUM_NAUTILUS_ARMOR);
         anchor = tab.chain(mc("iron_nautilus_armor"), NautilusArmorRegistry.OREGANIZED_SILVER_NAUTILUS_ARMOR);
         anchor = tab.chain(anchor, NautilusArmorRegistry.CANDC_SILVER_NAUTILUS_ARMOR);
-        anchor = tab.chain(mc("diamond_nautilus_armor"), NautilusArmorRegistry.OREGANIZED_ELECTRUM_NAUTILUS_ARMOR);
-        tab.chain(mc("netherite_nautilus_armor"), NautilusArmorRegistry.CANDC_NECROMIUM_NAUTILUS_ARMOR);
+        anchor = tab.chain(mc("diamond_nautilus_armor"), NautilusArmorRegistry.INVAR_NAUTILUS_ARMOR);
+        anchor = tab.chain(anchor, NautilusArmorRegistry.OREGANIZED_ELECTRUM_NAUTILUS_ARMOR);
+        anchor = tab.chain(mc("netherite_nautilus_armor"), NautilusArmorRegistry.CANDC_NECROMIUM_NAUTILUS_ARMOR);
+        tab.chain(anchor, NautilusArmorRegistry.SANGUINE_NAUTILUS_ARMOR);
+    }
+
+    // ==================== 传奇怪物：物品 ====================
+
+    private static void buildLegendaryMonsters(TabEditor tab) {
+        tab.chain(lm("enderitium_sword"), SpearRegistry.LEGENDARY_MONSTERS_ENDERITIUM_SPEAR);
     }
 
     // ==================== 更好的末地：物品 ====================
 
     private static void buildBetterEndItems(TabEditor tab) {
         // 锻锤 → 对应材质长矛
-        tab.chain(be("thallasium_hammer"), EquipmentComplement.THALLASIUM_SPEAR);
-        tab.chain(be("terminite_hammer"), EquipmentComplement.TERMINITE_SPEAR);
-        tab.chain(be("aeternium_hammer"), EquipmentComplement.AETERNIUM_SPEAR);
+        tab.chain(be("thallasium_hammer"), SpearRegistry.THALLASIUM_SPEAR);
+        tab.chain(be("terminite_hammer"), SpearRegistry.TERMINITE_SPEAR);
+        tab.chain(be("aeternium_hammer"), SpearRegistry.AETERNIUM_SPEAR);
 
         // 剑柄 → 对应材质矛头
-        tab.chain(be("thallasium_sword_handle"), EquipmentComplement.THALLASIUM_SPEAR_HEAD);
-        tab.chain(be("terminite_sword_handle"), EquipmentComplement.TERMINITE_SPEAR_HEAD);
-        tab.chain(be("aeternium_sword_handle"), EquipmentComplement.AETERNIUM_SPEAR_HEAD);
+        tab.chain(be("thallasium_sword_handle"), SpearRegistry.THALLASIUM_SPEAR_HEAD);
+        tab.chain(be("terminite_sword_handle"), SpearRegistry.TERMINITE_SPEAR_HEAD);
+        tab.chain(be("aeternium_sword_handle"), SpearRegistry.AETERNIUM_SPEAR_HEAD);
 
         // 靴子 → 马铠 → 鹦鹉螺铠
         tab.chain2(be("thallasium_boots"),
@@ -216,6 +235,10 @@ public class CreativeTabEvents {
 
     private static Item be(String path) {
         return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("betterend", path));
+    }
+
+    private static Item lm(String path) {
+        return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("legendary_monsters", path));
     }
 
     /**

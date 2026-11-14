@@ -134,5 +134,14 @@
   "item.minecraft.waxed_copper_ingot": "涂蜡的铜锭",
   "item.minecraft.waxed_exposed_copper_ingot": "涂蜡的斑驳铜锭",
   "item.minecraft.waxed_weathered_copper_ingot": "涂蜡的锈蚀铜锭",
-  "item.minecraft.waxed_oxidized_copper_ingot": "涂蜡的氧化铜锭"
+  "item.minecraft.waxed_oxidized_copper_ingot": "涂蜡的氧化铜锭",
+  "item.curiosities.aluminum_spear": "铝矛",
+  "item.curiosities.aluminum_horse_armor": "旅行者马铠",
+  "item.curiosities.aluminum_nautilus_armor": "旅行者鹦鹉螺铠",
+  "item.curiosities.invar_spear": "殷钢矛",
+  "item.curiosities.invar_horse_armor": "殷钢马铠",
+  "item.curiosities.invar_nautilus_armor": "殷钢鹦鹉螺铠",
+  "item.legendary_monsters.enderitium_spear": "终末金属矛",
+  "item.caverns_and_chasms.sanguine_horse_armor": "血裔马铠",
+  "item.caverns_and_chasms.sanguine_nautilus_armor": "血裔鹦鹉螺铠"
 }

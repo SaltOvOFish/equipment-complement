@@ -3,7 +3,7 @@ package io.github.SaltOvOFish.equipmentcomplement.client;
 import com.blackgear.platform.client.v2.render.ItemRendererRegistry;
 import com.blackgear.platform.core.util.event.ResultHolder;
 import io.github.SaltOvOFish.equipmentcomplement.CopperEquipmentRegistry;
-import io.github.SaltOvOFish.equipmentcomplement.EquipmentComplement;
+import io.github.SaltOvOFish.equipmentcomplement.SpearRegistry;
 import net.minecraft.client.renderer.ItemModelShaper;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
@@ -48,9 +48,11 @@ public class AddonSpearRenderer implements ItemRendererRegistry.Renderer {
     private AddonSpearRenderer() {
     }
 
-    /** 在事件触发时（物品已注册）动态收集所有实际注册的长矛。 */
+    /**
+     * 在事件触发时（物品已注册）动态收集所有实际注册的长矛。
+     * 只在非空时缓存：防止万一在注册完成前被意外调用而永久缓存成空集合。
+     */
     public static Set<ItemLike> spears() {
-        // 缓存只在收集到内容后才生效（防止万一在注册完成前被调到而缓存成空集合）
         if (spears == null || spears.isEmpty()) spears = collectSpears();
         return spears;
     }
@@ -59,21 +61,24 @@ public class AddonSpearRenderer implements ItemRendererRegistry.Renderer {
         Set<ItemLike> set = new LinkedHashSet<>();
         // VBP 铜矛的 7 个氧化 / 涂蜡变体
         set.addAll(CopperEquipmentRegistry.spears());
-        add(set, EquipmentComplement.OREGANIZED_SILVER_SPEAR);
-        add(set, EquipmentComplement.OREGANIZED_ELECTRUM_SPEAR);
-        add(set, EquipmentComplement.THALLASIUM_SPEAR);
-        add(set, EquipmentComplement.TERMINITE_SPEAR);
-        add(set, EquipmentComplement.AETERNIUM_SPEAR);
-        add(set, EquipmentComplement.CANDC_SILVER_SPEAR);
-        add(set, EquipmentComplement.CANDC_NECROMIUM_SPEAR);
-        add(set, EquipmentComplement.CANDC_COPPER_SPEAR);
-        add(set, EquipmentComplement.CANDC_EXPOSED_COPPER_SPEAR);
-        add(set, EquipmentComplement.CANDC_WEATHERED_COPPER_SPEAR);
-        add(set, EquipmentComplement.CANDC_OXIDIZED_COPPER_SPEAR);
-        add(set, EquipmentComplement.CANDC_WAXED_COPPER_SPEAR);
-        add(set, EquipmentComplement.CANDC_WAXED_EXPOSED_COPPER_SPEAR);
-        add(set, EquipmentComplement.CANDC_WAXED_WEATHERED_COPPER_SPEAR);
-        add(set, EquipmentComplement.CANDC_WAXED_OXIDIZED_COPPER_SPEAR);
+        add(set, SpearRegistry.OREGANIZED_SILVER_SPEAR);
+        add(set, SpearRegistry.OREGANIZED_ELECTRUM_SPEAR);
+        add(set, SpearRegistry.THALLASIUM_SPEAR);
+        add(set, SpearRegistry.TERMINITE_SPEAR);
+        add(set, SpearRegistry.AETERNIUM_SPEAR);
+        add(set, SpearRegistry.CANDC_SILVER_SPEAR);
+        add(set, SpearRegistry.CANDC_NECROMIUM_SPEAR);
+        add(set, SpearRegistry.CANDC_COPPER_SPEAR);
+        add(set, SpearRegistry.CANDC_EXPOSED_COPPER_SPEAR);
+        add(set, SpearRegistry.CANDC_WEATHERED_COPPER_SPEAR);
+        add(set, SpearRegistry.CANDC_OXIDIZED_COPPER_SPEAR);
+        add(set, SpearRegistry.CANDC_WAXED_COPPER_SPEAR);
+        add(set, SpearRegistry.CANDC_WAXED_EXPOSED_COPPER_SPEAR);
+        add(set, SpearRegistry.CANDC_WAXED_WEATHERED_COPPER_SPEAR);
+        add(set, SpearRegistry.CANDC_WAXED_OXIDIZED_COPPER_SPEAR);
+        add(set, SpearRegistry.CURIOSITIES_ALUMINUM_SPEAR);
+        add(set, SpearRegistry.CURIOSITIES_INVAR_SPEAR);
+        add(set, SpearRegistry.LEGENDARY_MONSTERS_ENDERITIUM_SPEAR);
         return set;
     }
 

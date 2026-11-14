@@ -9,6 +9,9 @@ displayName = "${mod_name}"
 authors = "${mod_authors}"
 description = '''${mod_description}'''
 
+[[mixins]]
+config = "equipment_complement.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId = "neoforge"
     type = "required"
@@ -58,6 +61,22 @@ description = '''${mod_description}'''
 # 可选前置：Caverns & Chasms
 [[dependencies.${mod_id}]]
     modId = "caverns_and_chasms"
+    type = "optional"
+    versionRange = "[0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+# 可选前置：Curiosities
+[[dependencies.${mod_id}]]
+    modId = "curiosities"
+    type = "optional"
+    versionRange = "[0,)"
+    ordering = "AFTER"
+    side = "BOTH"
+
+# 可选前置：Legendary Monsters
+[[dependencies.${mod_id}]]
+    modId = "legendary_monsters"
     type = "optional"
     versionRange = "[0,)"
     ordering = "AFTER"

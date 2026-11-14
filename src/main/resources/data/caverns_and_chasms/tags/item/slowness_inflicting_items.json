@@ -1,1 +1,6 @@
-{ "values": [ "caverns_and_chasms:necromium_spear" ] }
+{
+  "replace": false,
+  "values": [
+    { "id": "caverns_and_chasms:necromium_spear", "required": false }
+  ]
+}

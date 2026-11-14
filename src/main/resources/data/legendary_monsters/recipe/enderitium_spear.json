@@ -1,0 +1,12 @@
+{
+  "neoforge:conditions": [
+    { "type": "neoforge:item_exists", "item": "legendary_monsters:enderitium_spear" },
+    { "type": "neoforge:item_exists", "item": "legendary_monsters:enderitium_upgrade_smithing_template" },
+    { "type": "neoforge:item_exists", "item": "minecraft:diamond_spear" }
+  ],
+  "type": "minecraft:smithing_transform",
+  "template": { "item": "legendary_monsters:enderitium_upgrade_smithing_template" },
+  "base": { "item": "minecraft:diamond_spear" },
+  "addition": {"item":"legendary_monsters:enderitium_ingot"},
+  "result": { "count": 1, "id": "legendary_monsters:enderitium_spear" }
+}

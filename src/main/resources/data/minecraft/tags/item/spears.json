@@ -22,6 +22,9 @@
     { "id": "minecraft:waxed_copper_spear", "required": false },
     { "id": "minecraft:waxed_exposed_copper_spear", "required": false },
     { "id": "minecraft:waxed_weathered_copper_spear", "required": false },
-    { "id": "minecraft:waxed_oxidized_copper_spear", "required": false }
+    { "id": "minecraft:waxed_oxidized_copper_spear", "required": false },
+    { "id": "curiosities:aluminum_spear", "required": false },
+    { "id": "curiosities:invar_spear", "required": false },
+    { "id": "legendary_monsters:enderitium_spear", "required": false }
   ]
 }

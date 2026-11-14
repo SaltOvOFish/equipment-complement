@@ -51,10 +51,10 @@ public final class CopperOxidation {
     /** 「铜」基础阶段的概率倍率（与 C&amp;C / 原版风化一致）。 */
     private static final float BASE_STAGE_MULTIPLIER = 0.75F;
 
-    private static Stage[] byItemId;
+    private static volatile Stage[] byItemId;
 
     /** 涂蜡物品 → 同阶段未涂蜡物品的反向表（合成去蜡用），与 {@link #byItemId} 同尺寸。 */
-    private static Item[] unwaxedByItemId;
+    private static volatile Item[] unwaxedByItemId;
 
     /** 缓存的槽位数组，避免每个实体都做一次枚举克隆。 */
     private static final EquipmentSlot[] SLOTS = EquipmentSlot.values();
@@ -317,52 +317,59 @@ public final class CopperOxidation {
     // ==================== 建表 ====================
 
     private static Stage[] table() {
-        if (byItemId == null) {
-            Stage[] table = new Stage[BuiltInRegistries.ITEM.size()];
-            for (Chain chain : chains()) {
-                Item[] items = chain.items;
-                if (items[1] == null || items[1] == Items.AIR) continue; // 变体不可用则整条链跳过
-                for (int i = 0; i < STAGES; i++) {
-                    Item unwaxed = items[i];
-                    if (unwaxed == null || unwaxed == Items.AIR) continue;
-                    int id = BuiltInRegistries.ITEM.getId(unwaxed);
-                    if (id < 0 || id >= table.length) continue;
-                    table[id] = new Stage(i < STAGES - 1 ? items[i + 1] : null,
-                            i > 0 ? items[i - 1] : null, items[0], usable(items[i + STAGES]),
-                            i == 0, chain.slotType, chain.gate, chain.craftOnly, chain.ingot);
-                }
-            }
-            byItemId = table;
+        Stage[] table = byItemId;
+        if (table == null) {
+            buildTables();
+            table = byItemId;
         }
-        return byItemId;
+        return table;
     }
 
     /** 查反向表：涂蜡物品 → 同阶段未涂蜡物品；不是涂蜡物品返回 null。 */
     private static Item unwaxedOf(Item item) {
         if (item == null || item == Items.AIR) return null;
-        Item[] table = unwaxedTable();
+        Item[] table = unwaxedByItemId;
+        if (table == null) {
+            buildTables();
+            table = unwaxedByItemId;
+        }
         int id = BuiltInRegistries.ITEM.getId(item);
         return id >= 0 && id < table.length ? table[id] : null;
     }
 
-    private static Item[] unwaxedTable() {
-        if (unwaxedByItemId == null) {
-            Item[] table = new Item[BuiltInRegistries.ITEM.size()];
-            for (Chain chain : chains()) {
-                Item[] items = chain.items;
-                if (items[1] == null || items[1] == Items.AIR) continue; // 变体不可用则整条链跳过
-                for (int i = 0; i < STAGES; i++) {
-                    Item waxed = usable(items[i + STAGES]);
-                    Item unwaxed = usable(items[i]);
-                    if (waxed == null || unwaxed == null) continue;
-                    int id = BuiltInRegistries.ITEM.getId(waxed);
-                    if (id < 0 || id >= table.length) continue;
-                    table[id] = unwaxed;
+    /**
+     * 一次遍历同时构建「阶段表」与「去蜡反向表」。
+     * 两张表共用同一条链列表，分开建会重复调用 {@link #chains()}（每次都会新建若干对象）。
+     */
+    private static synchronized void buildTables() {
+        if (byItemId != null && unwaxedByItemId != null) return;
+
+        int size = BuiltInRegistries.ITEM.size();
+        Stage[] stages = new Stage[size];
+        Item[] unwaxed = new Item[size];
+
+        for (Chain chain : chains()) {
+            Item[] items = chain.items;
+            if (items[1] == null || items[1] == Items.AIR) continue; // 变体不可用则整条链跳过
+            for (int i = 0; i < STAGES; i++) {
+                Item base = items[i];
+                if (base == null || base == Items.AIR) continue;
+                int id = BuiltInRegistries.ITEM.getId(base);
+                if (id < 0 || id >= size) continue;
+                stages[id] = new Stage(i < STAGES - 1 ? items[i + 1] : null,
+                        i > 0 ? items[i - 1] : null, items[0], usable(items[i + STAGES]),
+                        i == 0, chain.slotType, chain.gate, chain.craftOnly, chain.ingot);
+
+                Item waxed = usable(items[i + STAGES]);
+                if (waxed != null) {
+                    int waxedId = BuiltInRegistries.ITEM.getId(waxed);
+                    if (waxedId >= 0 && waxedId < size) unwaxed[waxedId] = base;
                 }
             }
-            unwaxedByItemId = table;
         }
-        return unwaxedByItemId;
+
+        unwaxedByItemId = unwaxed;
+        byItemId = stages;
     }
 
     private static List<Chain> chains() {
@@ -370,14 +377,14 @@ public final class CopperOxidation {
 
         // ===== 族一：本模组的 C&C 命名空间铜矛 / 铜鹦鹉螺铠（C&C 本体没有这两件） =====
         chains.add(chain(EquipmentConfig.CANDC_COPPER_OXIDATION, EquipmentSlot.Type.HAND,
-                EquipmentComplement.CANDC_COPPER_SPEAR,
-                EquipmentComplement.CANDC_EXPOSED_COPPER_SPEAR,
-                EquipmentComplement.CANDC_WEATHERED_COPPER_SPEAR,
-                EquipmentComplement.CANDC_OXIDIZED_COPPER_SPEAR,
-                EquipmentComplement.CANDC_WAXED_COPPER_SPEAR,
-                EquipmentComplement.CANDC_WAXED_EXPOSED_COPPER_SPEAR,
-                EquipmentComplement.CANDC_WAXED_WEATHERED_COPPER_SPEAR,
-                EquipmentComplement.CANDC_WAXED_OXIDIZED_COPPER_SPEAR));
+                SpearRegistry.CANDC_COPPER_SPEAR,
+                SpearRegistry.CANDC_EXPOSED_COPPER_SPEAR,
+                SpearRegistry.CANDC_WEATHERED_COPPER_SPEAR,
+                SpearRegistry.CANDC_OXIDIZED_COPPER_SPEAR,
+                SpearRegistry.CANDC_WAXED_COPPER_SPEAR,
+                SpearRegistry.CANDC_WAXED_EXPOSED_COPPER_SPEAR,
+                SpearRegistry.CANDC_WAXED_WEATHERED_COPPER_SPEAR,
+                SpearRegistry.CANDC_WAXED_OXIDIZED_COPPER_SPEAR));
 
         chains.add(chain(EquipmentConfig.CANDC_COPPER_OXIDATION, EquipmentSlot.Type.ANIMAL_ARMOR,
                 NautilusArmorRegistry.CANDC_COPPER_NAUTILUS_ARMOR,
